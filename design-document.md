@@ -10,7 +10,7 @@
 
 [One Step From Eden (Inspired by the Mega Man Battle Network series)](https://www.youtube.com/watch?v=0ZZuo7Xpmqs )
 
-### Game Description
+## Game Description
 
 Our game would play out like the two game examples listed above, but it would be PvP only. Actions happen in real time with movement restricted to a tile grid. As you can see in the trailers, the player will be able to dodge attacks by moving on the grid. Attacks will have a set path and hitbox. Some attacks will go across in a straight line, others might zigzag or hit in an arc. The objective would be to reduce the health of the opponent to 0, while dodging attacks to make sure they can’t do the same to you. Each player has a hand of 5 cards. After using a card, the empty slot would be replaced with another card in your deck. After using every card in the deck, the deck would refill.
 
@@ -39,7 +39,7 @@ Quick snappy movement between grid squares and faced paced attacks through playi
 The competitive aspect and timing of shooting and dodging attacks in a fast-paced environment will be a fun experience. Picking out the right card to use and strategize will reward clever thinking and fast reflexes.
 
 
-### Development Strategy
+## Development Strategy
 
 #### Milestone 1 (Nov 15 Demo and Nov 19 Group Status Report Progress):
 
@@ -60,7 +60,7 @@ The competitive aspect and timing of shooting and dodging attacks in a fast-pace
 - Fix bugs, smooth out interactions, finish the game 
 
 
-### High Bar
+## High Bar
 
 - 3 different characters: Each character will have their own deck of cards and their own different attacks. Each character will also have their own theme and background. This will increase variety in the gameplay. 
 - Fully custom assets: Custom artwork, animation, music, and sound effects made to make the game stand out and have an identity of its own, especially when compared with the inspiration material 
@@ -68,7 +68,7 @@ The competitive aspect and timing of shooting and dodging attacks in a fast-pace
 - Using multiple cards together to create stronger and more varied attacks: If you have 2 of the same basic shot cards next to each other in your hand, it would be cool if you could play them at the same time to combine them into a more powerful version of that basic attack. 
 
 
-### Low Bar Checklist
+## Low Bar Checklist
 
 - Movement along a confined grid: The players will both be moving horizontally or vertically on a 3x5 grid. They cannot exit the grid. 
 - Deck of cards: The deck will be auto dealt and determine the attacks that you can use. The player will have a hand of 5 cards and as they use a card, the slot in their hand will be replaced with a card from the deck. After using all cards in the deck, the deck will be refilled. 
@@ -78,7 +78,7 @@ The competitive aspect and timing of shooting and dodging attacks in a fast-pace
 - At least one playable character: The players should be able to have access to a deck of cards and be able to move around a character, even if that character is a simple placeholder.
 
 
-### Complexity Rubric
+## Complexity Rubric
 
 - Realtime Game (15) – Actions in the game will occur in real-time. Movements and attacks will occur in real-time.
 - Multiplayer (10) – The game is intended to be a PvP game. The players will face off against each other and try to use their attacks to reduce the opponent’s HP to 0 while dodging their opponent’s attacks.
