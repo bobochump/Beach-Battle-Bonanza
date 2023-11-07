@@ -52,7 +52,7 @@ The competitive aspect and timing of shooting and dodging attacks in a fast-pace
 #### Milestone 2 (Nov 29):
 
 - June: Finish character sprites and add basic animation, add HP bar and Mana gauge animation systems 
-- Jason: Networking complete: Player positions, attack information, and game states should be sent and received back and forth.  
+- Jason: Networking complete: com.beachbb.game.Player positions, attack information, and game states should be sent and received back and forth.  
 - Camillia: Multiple different cards dealt to the player automatically, dictating which attacks they can use, along with code to support choosing between different characters before the match starts 
 
 #### Milestone 3 (Dec 6 Showcase):
