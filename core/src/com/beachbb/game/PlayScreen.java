@@ -25,10 +25,11 @@ public class PlayScreen extends ScreenAdapter {
 
     public PlayScreen(BeachBB game, int p1, int p2) {
         bbbGame = game;
-        grid = new ArrayList<>(30);
         player1 = new Player(p1, 1);
         player2 = new Player(p2, 2);
 
+        // make a grid and add tiles to it
+        grid = new ArrayList<>(30);
         int tileCount = 0;
         for (int col = 0; col < 6; col++) {
             for (int row = 0; row < 5; row++) {
@@ -49,8 +50,42 @@ public class PlayScreen extends ScreenAdapter {
 
     public void update(float delta) {
         if (state == SubState.PREP) {
-            // makes sure both players are synced and initiates countdown
+            // to-do: make sure both players are synced and initiates countdown
             // move onto play state once countdown finishes
+            state = SubState.PLAY;
+        }
+        if (state == SubState.PLAY) {
+            Gdx.input.setInputProcessor(new InputAdapter() {
+                public boolean keyDown(int keycode) {
+                    switch (keycode) {
+                        case Input.Keys.W:
+                            player1.movePlayer(1);
+                            break;
+                        case Input.Keys.D:
+                            player1.movePlayer(2);
+                            break;
+                        case Input.Keys.S:
+                            player1.movePlayer(3);
+                            break;
+                        case Input.Keys.A:
+                            player1.movePlayer(4);
+                            break;
+                        case Input.Keys.UP:
+                            player2.movePlayer(1);
+                            break;
+                        case Input.Keys.RIGHT:
+                            player2.movePlayer(2);
+                            break;
+                        case Input.Keys.DOWN:
+                            player2.movePlayer(3);
+                            break;
+                        case Input.Keys.LEFT:
+                            player2.movePlayer(4);
+                            break;
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -66,8 +101,8 @@ public class PlayScreen extends ScreenAdapter {
             t.drawTile(bbbGame.batch);
         }
 
-        player1.drawPlayer(bbbGame.batch);
         player2.drawPlayer(bbbGame.batch);
+        player1.drawPlayer(bbbGame.batch);
 
         bbbGame.batch.end();
     }

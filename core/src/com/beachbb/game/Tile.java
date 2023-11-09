@@ -14,8 +14,8 @@ public class Tile extends Actor {
     private int tileCoordX;
     private int tileCoordY;
     private int tileSide; // 1 for Player 1's tile, 2 for Player 2's tile
-    private boolean isDanger;
-    private boolean isBlocked;
+    private boolean isDanger; // yellow tile, use later to represent tiles that cause damage
+    private boolean isBlocked; // red tile, use later to represent non-traversable tiles
     private Texture tileTexture;
     private TextureRegion tileSprite;
 
@@ -23,8 +23,8 @@ public class Tile extends Actor {
         tileID = id;
         tileX = x;
         tileY = y;
-        tileCoordX = 126 * tileX + 171;
-        tileCoordY = 110 * tileY + 76;
+        tileCoordX = tileX * 126 + 171;
+        tileCoordY = tileY * 110 + 76;
         tileSide = side;
         isDanger = false;
         isBlocked = false;
