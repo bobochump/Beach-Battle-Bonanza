@@ -21,11 +21,25 @@ public class PlayScreen extends ScreenAdapter {
     private Player player2;
     private enum SubState { PREP, PLAY, PAUSE, END };
     private SubState state;
+    private ArrayList<Tile> grid;
 
     public PlayScreen(BeachBB game, int p1, int p2) {
         bbbGame = game;
+        grid = new ArrayList<>(30);
         player1 = new Player(p1, 1);
         player2 = new Player(p2, 2);
+
+        int tileCount = 0;
+        for (int col = 0; col < 6; col++) {
+            for (int row = 0; row < 5; row++) {
+                if (tileCount < 15) {
+                    grid.add(new Tile(tileCount, row, col, 1));
+                } else {
+                    grid.add(new Tile(tileCount, row, col, 2));
+                }
+                tileCount++;
+            }
+        }
     }
 
     public void show() {
@@ -46,6 +60,12 @@ public class PlayScreen extends ScreenAdapter {
         bbbGame.batch.begin();
 
         bbbGame.batch.draw(bbbGame.am.get(bbbGame.TEX_SCREEN_GAME, Texture.class), 0, 0);
+
+        for (Iterator<Tile> ti = grid.iterator(); ti.hasNext();) {
+            Tile t = ti.next();
+            t.drawTile(bbbGame.batch);
+        }
+
         player1.drawPlayer(bbbGame.batch);
         player2.drawPlayer(bbbGame.batch);
 
