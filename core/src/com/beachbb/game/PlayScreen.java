@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class PlayScreen extends ScreenAdapter {
     private BeachBB bbbGame;
@@ -21,12 +22,17 @@ public class PlayScreen extends ScreenAdapter {
     private Player player2;
     private enum SubState { PREP, PLAY, PAUSE, END };
     private SubState state;
+    private Server server;
     private ArrayList<Tile> grid;
+    private NetworkEntity network;
+    private ConcurrentLinkedQueue<String> queue;
 
-    public PlayScreen(BeachBB game, int p1, int p2) {
+    public PlayScreen(BeachBB game, int p1, int p2, NetworkEntity playerNetwork, ConcurrentLinkedQueue<String> playerQueue) {
         bbbGame = game;
         player1 = new Player(p1, 1);
         player2 = new Player(p2, 2);
+        network = playerNetwork;
+        queue = playerQueue;
 
         // make a grid and add tiles to it
         grid = new ArrayList<>(30);
@@ -55,19 +61,37 @@ public class PlayScreen extends ScreenAdapter {
             state = SubState.PLAY;
         }
         if (state == SubState.PLAY) {
+            if (!queue.isEmpty()) {
+                String command;
+                command = queue.poll();
+                String commandType = command.substring(0, 2);
+
+                // Checks for command types
+                if (commandType.equals("01")) { // Checks for movement command
+                    String movement = command.substring(2);
+                    player2.movePlayer(Integer.parseInt(movement));
+                } else if (commandType.equals("02")) { // Checks for attack command
+
+                }
+            }
+
             Gdx.input.setInputProcessor(new InputAdapter() {
                 public boolean keyDown(int keycode) {
                     switch (keycode) {
                         case Input.Keys.W:
+                            network.sendMoveCommand(3);
                             player1.movePlayer(1);
                             break;
                         case Input.Keys.D:
+                            network.sendMoveCommand(4);
                             player1.movePlayer(2);
                             break;
                         case Input.Keys.S:
+                            network.sendMoveCommand(1);
                             player1.movePlayer(3);
                             break;
                         case Input.Keys.A:
+                            network.sendMoveCommand(2);
                             player1.movePlayer(4);
                             break;
                         case Input.Keys.UP:
