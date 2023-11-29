@@ -11,7 +11,10 @@ public class Deck {
     private ArrayList<Card> cards;
     private Texture cardBackTexture;
     private TextureRegion cardBackSprite;
+    private TextureRegion cardSelectedSprite;
+    private int selectedCard;
     public Deck(int characterNum) {
+        selectedCard = 0;
         cards = new ArrayList<Card>();
         switch (characterNum) {
             case 3:
@@ -35,13 +38,36 @@ public class Deck {
         }
         cardBackTexture = new Texture(Gdx.files.internal("bbb-base-card-back.png"));
         cardBackSprite = new TextureRegion(cardBackTexture, 0, 0, 252, 139);
+        cardSelectedSprite = new TextureRegion(cardBackTexture, 504, 0, 252, 139);
+    }
+    void changeSelection(int newCard) {
+        //-1 is go up a card, -2 is go down a card, 0-4 is go to that card
+        if(newCard == -1) {
+            selectedCard += 1;
+            if(selectedCard == 5) {
+                selectedCard = 0;
+            }
+        }
+        else if(newCard == -2) {
+            selectedCard -= 1;
+            if(selectedCard == -1) {
+                selectedCard = 4;
+            }
+        } else {
+            selectedCard = newCard;
+        }
     }
 
     public void DrawDeck(SpriteBatch batch) {
         for(int i = 0; i < 5; i++) {
             Card cardToDraw = cards.get(i);
             if(cardToDraw != null) {
-                batch.draw(cardBackSprite, 979, 20 + ((139 + 11) * i));
+                if(selectedCard == i){
+                    batch.draw(cardSelectedSprite, 979, 20 + ((139 + 11) * i));
+                }
+                else {
+                    batch.draw(cardBackSprite, 979, 20 + ((139 + 11) * i));
+                }
                 cardToDraw.drawCard(batch, 979, 20 + ((139 + 11) * i));
             }
         }

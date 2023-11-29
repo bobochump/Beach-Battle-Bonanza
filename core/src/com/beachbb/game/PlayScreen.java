@@ -97,16 +97,33 @@ public class PlayScreen extends ScreenAdapter {
                             player1.movePlayer(4);
                             break;
                         case Input.Keys.UP:
-                            player2.movePlayer(1);
+                            //player2.movePlayer(1);
+                            playersDeck.changeSelection(-1);
                             break;
                         case Input.Keys.RIGHT:
-                            player2.movePlayer(2);
+                            //player2.movePlayer(2);
                             break;
                         case Input.Keys.DOWN:
-                            player2.movePlayer(3);
+                            //player2.movePlayer(3);
+                            playersDeck.changeSelection(-2);
                             break;
                         case Input.Keys.LEFT:
-                            player2.movePlayer(4);
+                            //player2.movePlayer(4);
+                            break;
+                        case Input.Keys.NUMPAD_1:
+                            playersDeck.changeSelection(0);
+                            break;
+                        case Input.Keys.NUMPAD_2:_2:
+                            playersDeck.changeSelection(1);
+                            break;
+                        case Input.Keys.NUMPAD_3:
+                            playersDeck.changeSelection(2);
+                            break;
+                        case Input.Keys.NUMPAD_4:
+                            playersDeck.changeSelection(3);
+                            break;
+                        case Input.Keys.NUMPAD_5:
+                            playersDeck.changeSelection(4);
                             break;
                     }
                     return true;
