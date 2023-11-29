@@ -26,6 +26,7 @@ public class PlayScreen extends ScreenAdapter {
     private ArrayList<Tile> grid;
     private NetworkEntity network;
     private ConcurrentLinkedQueue<String> queue;
+    //private Deck playersDeck;
 
     public PlayScreen(BeachBB game, int p1, int p2, NetworkEntity playerNetwork, ConcurrentLinkedQueue<String> playerQueue) {
         bbbGame = game;
@@ -33,6 +34,7 @@ public class PlayScreen extends ScreenAdapter {
         player2 = new Player(p2, 2);
         network = playerNetwork;
         queue = playerQueue;
+        //playersDeck = new Deck(p1);
 
         // make a grid and add tiles to it
         grid = new ArrayList<>(30);
@@ -127,6 +129,9 @@ public class PlayScreen extends ScreenAdapter {
 
         player2.drawPlayer(bbbGame.batch);
         player1.drawPlayer(bbbGame.batch);
+
+        //playersDeck.DrawDeck(bbbGame.batch);
+
 
         bbbGame.batch.end();
     }

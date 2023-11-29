@@ -14,9 +14,9 @@
 ### Resolved Issues
 
 ### Open Issues
-- **[1]**
-- **[2]**
-- **[3]**
+- **[1]** Implement placeholder cards and deck
+- **[2]** Give each player a different deck
+- **[3]** Give each card a different effect
 
 ## Jason
 ### Resolved Issues
