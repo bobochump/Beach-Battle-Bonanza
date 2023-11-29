@@ -41,8 +41,8 @@ public class Deck {
         for(int i = 0; i < 5; i++) {
             Card cardToDraw = cards.get(i);
             if(cardToDraw != null) {
-                batch.draw(cardBackSprite, 979 + ((139 + 11) * i), 20);
-                cardToDraw.drawCard(batch, 979 + ((139 + 11) * i), 20);
+                batch.draw(cardBackSprite, 979, 20 + ((139 + 11) * i));
+                cardToDraw.drawCard(batch, 979, 20 + ((139 + 11) * i));
             }
         }
     }
