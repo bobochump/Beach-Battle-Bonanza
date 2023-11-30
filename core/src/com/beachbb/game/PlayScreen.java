@@ -27,6 +27,7 @@ public class PlayScreen extends ScreenAdapter {
     private NetworkEntity network;
     private ConcurrentLinkedQueue<String> queue;
     private Deck playersDeck;
+    private int currentMana;
 
     public PlayScreen(BeachBB game, int p1, int p2, NetworkEntity playerNetwork, ConcurrentLinkedQueue<String> playerQueue) {
         bbbGame = game;
@@ -35,6 +36,7 @@ public class PlayScreen extends ScreenAdapter {
         network = playerNetwork;
         queue = playerQueue;
         playersDeck = new Deck(p1);
+        currentMana = 1000;
 
         // make a grid and add tiles to it
         grid = new ArrayList<>(30);
@@ -113,7 +115,7 @@ public class PlayScreen extends ScreenAdapter {
                         case Input.Keys.NUMPAD_1:
                             playersDeck.changeSelection(0);
                             break;
-                        case Input.Keys.NUMPAD_2:_2:
+                        case Input.Keys.NUMPAD_2:
                             playersDeck.changeSelection(1);
                             break;
                         case Input.Keys.NUMPAD_3:
@@ -125,6 +127,13 @@ public class PlayScreen extends ScreenAdapter {
                         case Input.Keys.NUMPAD_5:
                             playersDeck.changeSelection(4);
                             break;
+                        case Input.Keys.NUMPAD_ENTER:
+                            int effectID = playersDeck.useCard(currentMana);
+                            if(effectID == -1) {
+                                //play sound to say that you cant use that card
+                            } else {
+                                //summon the effect and send it to the other player
+                            }
                     }
                     return true;
                 }
