@@ -28,6 +28,8 @@ public class PlayScreen extends ScreenAdapter {
     private ConcurrentLinkedQueue<String> queue;
     private Deck playersDeck;
     private int currentMana;
+    private ArrayList<AttackEntity> currentAttacks;
+    private AttackConstructor attackConstructor;
 
     public PlayScreen(BeachBB game, int p1, int p2, NetworkEntity playerNetwork, ConcurrentLinkedQueue<String> playerQueue) {
         bbbGame = game;
@@ -40,6 +42,7 @@ public class PlayScreen extends ScreenAdapter {
 
         // make a grid and add tiles to it
         grid = new ArrayList<>(30);
+        attackConstructor = new AttackConstructor();
         int tileCount = 0;
         for (int col = 0; col < 6; col++) {
             for (int row = 0; row < 5; row++) {
@@ -51,6 +54,8 @@ public class PlayScreen extends ScreenAdapter {
                 tileCount++;
             }
         }
+
+        currentAttacks = new ArrayList<>(10);
     }
 
     public void show() {
@@ -75,7 +80,7 @@ public class PlayScreen extends ScreenAdapter {
                     String movement = command.substring(2);
                     player2.movePlayer(Integer.parseInt(movement));
                 } else if (commandType.equals("02")) { // Checks for attack command
-
+                    currentAttacks.add(attackConstructor.buildAttack(Integer.parseInt(command.substring(2))));
                 }
             }
 
@@ -133,11 +138,17 @@ public class PlayScreen extends ScreenAdapter {
                                 //play sound to say that you cant use that card
                             } else {
                                 //summon the effect and send it to the other player
+                                currentAttacks.add(attackConstructor.buildAttack(effectID));
+                                network.sendAttackCommand(effectID);
                             }
                     }
                     return true;
                 }
             });
+
+            for (AttackEntity a : currentAttacks) {
+                a.updateAttack(delta, grid);
+            }
         }
     }
 
@@ -158,6 +169,9 @@ public class PlayScreen extends ScreenAdapter {
 
         playersDeck.DrawDeck(bbbGame.batch);
 
+        for (AttackEntity a : currentAttacks) {
+            a.drawAttack(bbbGame.batch);
+        }
 
         bbbGame.batch.end();
     }
