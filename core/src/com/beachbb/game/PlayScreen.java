@@ -69,6 +69,7 @@ public class PlayScreen extends ScreenAdapter {
             // move onto play state once countdown finishes
             state = SubState.PLAY;
         }
+        final float currentDelta = delta; //gives me error if I try to pass delta into the second attack constructor. Not the first one tho?
         if (state == SubState.PLAY) {
             if (!queue.isEmpty()) {
                 String command;
@@ -80,7 +81,7 @@ public class PlayScreen extends ScreenAdapter {
                     String movement = command.substring(2);
                     player2.movePlayer(Integer.parseInt(movement));
                 } else if (commandType.equals("02")) { // Checks for attack command
-                    currentAttacks.add(attackConstructor.buildAttack(Integer.parseInt(command.substring(2))));
+                    currentAttacks.add(attackConstructor.buildAttack(Integer.parseInt(command.substring(2)), currentDelta, player2.getTileX(), player2.getTileY()));
                 }
             }
 
@@ -138,7 +139,7 @@ public class PlayScreen extends ScreenAdapter {
                                 //play sound to say that you cant use that card
                             } else {
                                 //summon the effect and send it to the other player
-                                currentAttacks.add(attackConstructor.buildAttack(effectID));
+                                currentAttacks.add(attackConstructor.buildAttack(effectID, currentDelta, player1.getTileX(), player1.getTileY()));
                                 network.sendAttackCommand(effectID);
                             }
                     }
@@ -147,7 +148,10 @@ public class PlayScreen extends ScreenAdapter {
             });
 
             for (AttackEntity a : currentAttacks) {
-                a.updateAttack(delta, grid);
+                int returnVal = a.updateAttack(delta, grid);
+                if(returnVal == 1){
+                    currentAttacks.remove(a);
+                }
             }
         }
     }
