@@ -26,6 +26,10 @@ public class PlayScreen extends ScreenAdapter {
     private ArrayList<Tile> grid;
     private NetworkEntity network;
     private ConcurrentLinkedQueue<String> queue;
+    private Deck playersDeck;
+    private int currentMana;
+    private ArrayList<AttackEntity> currentAttacks;
+    private AttackConstructor attackConstructor;
 
     public PlayScreen(BeachBB game, int p1, int p2, NetworkEntity playerNetwork, ConcurrentLinkedQueue<String> playerQueue) {
         bbbGame = game;
@@ -33,9 +37,12 @@ public class PlayScreen extends ScreenAdapter {
         player2 = new Player(p2, 2);
         network = playerNetwork;
         queue = playerQueue;
+        playersDeck = new Deck(p1);
+        currentMana = 1000;
 
         // make a grid and add tiles to it
         grid = new ArrayList<>(30);
+        attackConstructor = new AttackConstructor();
         int tileCount = 0;
         for (int col = 0; col < 6; col++) {
             for (int row = 0; row < 5; row++) {
@@ -47,6 +54,8 @@ public class PlayScreen extends ScreenAdapter {
                 tileCount++;
             }
         }
+
+        currentAttacks = new ArrayList<>(10);
     }
 
     public void show() {
@@ -60,6 +69,7 @@ public class PlayScreen extends ScreenAdapter {
             // move onto play state once countdown finishes
             state = SubState.PLAY;
         }
+        final float currentDelta = delta; //gives me error if I try to pass delta into the second attack constructor. Not the first one tho?
         if (state == SubState.PLAY) {
             if (!queue.isEmpty()) {
                 String command;
@@ -71,7 +81,7 @@ public class PlayScreen extends ScreenAdapter {
                     String movement = command.substring(2);
                     player2.movePlayer(Integer.parseInt(movement));
                 } else if (commandType.equals("02")) { // Checks for attack command
-
+                    currentAttacks.add(attackConstructor.buildAttack(Integer.parseInt(command.substring(2)), currentDelta, player2.getTileX(), player2.getTileY()));
                 }
             }
 
@@ -95,21 +105,60 @@ public class PlayScreen extends ScreenAdapter {
                             player1.movePlayer(4);
                             break;
                         case Input.Keys.UP:
-                            player2.movePlayer(1);
+                            //player2.movePlayer(1);
+                            playersDeck.changeSelection(-1);
                             break;
                         case Input.Keys.RIGHT:
-                            player2.movePlayer(2);
+                            //player2.movePlayer(2);
                             break;
                         case Input.Keys.DOWN:
-                            player2.movePlayer(3);
+                            //player2.movePlayer(3);
+                            playersDeck.changeSelection(-2);
                             break;
                         case Input.Keys.LEFT:
-                            player2.movePlayer(4);
+                            //player2.movePlayer(4);
                             break;
+                        case Input.Keys.NUMPAD_1:
+                            playersDeck.changeSelection(0);
+                            break;
+                        case Input.Keys.NUMPAD_2:
+                            playersDeck.changeSelection(1);
+                            break;
+                        case Input.Keys.NUMPAD_3:
+                            playersDeck.changeSelection(2);
+                            break;
+                        case Input.Keys.NUMPAD_4:
+                            playersDeck.changeSelection(3);
+                            break;
+                        case Input.Keys.NUMPAD_5:
+                            playersDeck.changeSelection(4);
+                            break;
+                        case Input.Keys.NUMPAD_ENTER:
+                            int effectID = playersDeck.useCard(currentMana);
+                            if(effectID == -1) {
+                                //play sound to say that you cant use that card
+                            } else {
+                                //summon the effect and send it to the other player
+                                currentAttacks.add(attackConstructor.buildAttack(effectID, currentDelta, player1.getTileX(), player1.getTileY()));
+                                network.sendAttackCommand(effectID);
+                            }
                     }
                     return true;
                 }
             });
+
+            ArrayList<AttackEntity> attacksToKeep = new ArrayList<>();
+
+            for (AttackEntity a : currentAttacks) {
+                int returnVal = a.updateAttack(delta, grid);
+                attacksToKeep.add(a);
+                if(returnVal == 1){
+                    attacksToKeep.remove(a);
+                }
+            }
+            currentAttacks.clear();
+            currentAttacks.addAll(attacksToKeep);
+            attacksToKeep.clear();
         }
     }
 
@@ -127,6 +176,12 @@ public class PlayScreen extends ScreenAdapter {
 
         player2.drawPlayer(bbbGame.batch);
         player1.drawPlayer(bbbGame.batch);
+
+        playersDeck.DrawDeck(bbbGame.batch);
+
+        for (AttackEntity a : currentAttacks) {
+            a.drawAttack(bbbGame.batch);
+        }
 
         bbbGame.batch.end();
     }

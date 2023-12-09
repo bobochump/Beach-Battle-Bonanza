@@ -101,6 +101,14 @@ public class Player extends Actor {
         }
     }
 
+    public int getTileX(){
+        return x;
+    }
+
+    public int getTileY(){
+        return y;
+    }
+
     public void drawPlayer(SpriteBatch batch) {
         batch.draw(playerSprite, x * 126 + 171, y * 110 + 76);
     }

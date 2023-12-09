@@ -25,12 +25,9 @@ public class Server extends Thread implements NetworkEntity{
         output.println("03"+charNum);
     }
 
-    /*
-    public void sendAttackCommand(){
-        output.println("02");
-        output.println();
+    public void sendAttackCommand(int effectID){
+        output.println("02"+effectID);
     }
-    */
 
     public void run(){
         try{

@@ -15,9 +15,11 @@ public class BeachBB extends Game {
 	public static final String TEX_SCREEN_GAME = "bbb-base-game-screen.png";
 	public static final String TEX_SHEET_TILE = "bbb-base-tiles.png";
 	public static final String TEX_SHEET_CARD_BACK = "bbb-base-card-back.png";
+	public static final String TEX_SHEET_CARD_FRONT = "bbb-card-front.png";
 	public static final String TEX_SHEET_PLAYER1 = "bbb-base-sprite-shark.png";
 	public static final String TEX_SHEET_PLAYER2 = "bbb-base-sprite-mage.png";
 	public static final String TEX_SHEET_PLAYER3 = "bbb-base-sprite-rat.png";
+	public static final String TEX_SHEET_BULLET = "bbb-bullet.png";
 	
 	@Override
 	public void create () {
@@ -28,9 +30,11 @@ public class BeachBB extends Game {
 		am.load(TEX_SCREEN_GAME, Texture.class);
 		am.load(TEX_SHEET_TILE, Texture.class);
 		am.load(TEX_SHEET_CARD_BACK, Texture.class);
+		am.load(TEX_SHEET_CARD_FRONT, Texture.class);
 		am.load(TEX_SHEET_PLAYER1, Texture.class);
 		am.load(TEX_SHEET_PLAYER2, Texture.class);
 		am.load(TEX_SHEET_PLAYER3, Texture.class);
+		am.load(TEX_SHEET_BULLET, Texture.class);
 
 		batch = new SpriteBatch();
 

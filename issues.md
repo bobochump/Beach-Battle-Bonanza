@@ -12,12 +12,13 @@
 
 ## Camillia
 ### Resolved Issues
+- **[1]** Implement placeholder cards and deck
+- **[2]** Give each player a different deck
+- **[3]** Implement some form of a basic attack
 
 ### Open Issues
-- **[1]**
-- **[2]**
-- **[3]**
-
+- **[4]** Give each card a different effect
+- ** [5] ** Music and Sound Effects
 ## Jason
 ### Resolved Issues
 
