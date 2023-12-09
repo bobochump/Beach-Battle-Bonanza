@@ -147,12 +147,18 @@ public class PlayScreen extends ScreenAdapter {
                 }
             });
 
+            ArrayList<AttackEntity> attacksToKeep = new ArrayList<>();
+
             for (AttackEntity a : currentAttacks) {
                 int returnVal = a.updateAttack(delta, grid);
+                attacksToKeep.add(a);
                 if(returnVal == 1){
-                    currentAttacks.remove(a);
+                    attacksToKeep.remove(a);
                 }
             }
+            currentAttacks.clear();
+            currentAttacks.addAll(attacksToKeep);
+            attacksToKeep.clear();
         }
     }
 

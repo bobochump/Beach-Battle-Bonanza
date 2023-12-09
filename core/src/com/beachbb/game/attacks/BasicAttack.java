@@ -1,5 +1,7 @@
 package com.beachbb.game.attacks;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.beachbb.game.AttackEntity;
 import com.beachbb.game.Tile;
@@ -10,13 +12,15 @@ public class BasicAttack implements AttackEntity {
     final private float initialDelta;
     private int sourceX;
     private int sourceY;
-    private int x; //center of where to draw attack
-    private int y;
+    private float x; //center of where to draw attack
+    private float y;
     private int tileX;
     private int tileY;
     private int prevTileX;
     private int prevTileY;
     private boolean enemyAttack; //true if coming from enemy, false if coming from player
+    private Texture bullet;
+
     public BasicAttack(float delta, int playerX, int playerY){
         initialDelta = delta;
         sourceX = playerX;
@@ -28,11 +32,12 @@ public class BasicAttack implements AttackEntity {
         } else {
             tileY = sourceY + 1;
         }
-        x = tileX * 126 + 171 + 63;
-        y = tileY * 110 + 76 + 55;
+        x = tileX * 126;
+        y = tileY * 110;
+        bullet = new Texture(Gdx.files.internal("bbb-bullet.png"));
     }
     public int updateAttack(float delta, ArrayList<Tile> grid){
-        int speed = 32;
+        float speed = 256;
         if(enemyAttack){
             y -= speed * delta;
         } else {
@@ -40,9 +45,12 @@ public class BasicAttack implements AttackEntity {
         }
 
         //update tileX and tileY
-        tileX = (x - 171 - 63) % 126;
-        tileY = (y - 76 - 55) % 110;
+//        tileX = (int) (x - 171 - 63) % 126;
+//        tileY = (int) (y - 76 - 55) % 110;
+        tileX = (int) (x + 63) / 126;
+        tileY = (int) (y + 55) / 110;
         if(tileY > 5 || tileY < 0 || tileX > 4 || tileX < 0){
+            grid.get(prevTileY * 5 + prevTileX).setDanger(false);
             return 1;
         }
 
@@ -56,6 +64,6 @@ public class BasicAttack implements AttackEntity {
         return 0;
     }
     public void drawAttack(SpriteBatch batch){
-
+        batch.draw(bullet, x + 171 + 63 - 16,  y + 76 + 55 - 16);
     }
 }
