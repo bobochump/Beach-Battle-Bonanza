@@ -34,6 +34,8 @@ public class BasicAttack implements AttackEntity {
         }
         x = tileX * 126;
         y = tileY * 110;
+        prevTileX = -1;
+        prevTileY = -1;
         bullet = new Texture(Gdx.files.internal("bbb-bullet.png"));
     }
     public int updateAttack(float delta, ArrayList<Tile> grid){
@@ -49,14 +51,18 @@ public class BasicAttack implements AttackEntity {
 //        tileY = (int) (y - 76 - 55) % 110;
         tileX = (int) (x + 63) / 126;
         tileY = (int) (y + 55) / 110;
-        if(tileY > 5 || tileY < 0 || tileX > 4 || tileX < 0){
+        if((tileY > 5) || (tileY < 0) || (tileX > 4) || (tileX < 0) || (y < -55)){
             grid.get(prevTileY * 5 + prevTileX).setDanger(false);
             return 1;
         }
 
         if(prevTileX != tileX || prevTileY != tileY){
+//            System.out.println("PrevTileX = " + prevTileX + ", PrevTileY = " + prevTileY);
+//            System.out.println("TileX = " + tileX + ", TileY = " + tileY + "\n");
             grid.get(tileY * 5 + tileX).setDanger(true);
-            grid.get(prevTileY * 5 + prevTileX).setDanger(false);
+            if(prevTileY >= 0 || prevTileX >= 0){
+                grid.get(prevTileY * 5 + prevTileX).setDanger(false);
+            }
         }
 
         prevTileX = tileX;
