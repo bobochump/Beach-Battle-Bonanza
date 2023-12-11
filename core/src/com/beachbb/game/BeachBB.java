@@ -19,7 +19,13 @@ public class BeachBB extends Game {
 	public static final String TEX_SHEET_PLAYER1 = "bbb-base-sprite-shark.png";
 	public static final String TEX_SHEET_PLAYER2 = "bbb-base-sprite-mage.png";
 	public static final String TEX_SHEET_PLAYER3 = "bbb-base-sprite-rat.png";
+	public static final String TEX_SHEET_UI = "bbb-bars.png";
 	public static final String TEX_SHEET_BULLET = "bbb-bullet.png";
+	public static final String TEX_OVERLAY_WAITING = "bbb-base-waiting.png";
+	public static final String TEX_OVERLAY_WIN = "bbb-base-win01.png";
+	public static final String TEX_OVERLAY_WIN2 = "bbb-base-win02.png";
+	public static final String TEX_OVERLAY_LOSE = "bbb-base-lose01.png";
+	public static final String TEX_OVERLAY_LOSE2 = "bbb-base-lose02.png";
 	
 	@Override
 	public void create () {
@@ -34,7 +40,14 @@ public class BeachBB extends Game {
 		am.load(TEX_SHEET_PLAYER1, Texture.class);
 		am.load(TEX_SHEET_PLAYER2, Texture.class);
 		am.load(TEX_SHEET_PLAYER3, Texture.class);
+		am.load(TEX_SHEET_UI, Texture.class);
 		am.load(TEX_SHEET_BULLET, Texture.class);
+		am.load(TEX_OVERLAY_WAITING, Texture.class);
+		am.load(TEX_OVERLAY_WIN, Texture.class);
+		am.load(TEX_OVERLAY_WIN2, Texture.class);
+		am.load(TEX_OVERLAY_LOSE, Texture.class);
+		am.load(TEX_OVERLAY_LOSE2, Texture.class);
+
 
 		batch = new SpriteBatch();
 

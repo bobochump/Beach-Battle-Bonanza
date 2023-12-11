@@ -101,12 +101,32 @@ public class Player extends Actor {
         }
     }
 
+    public void takeDamage(float multiplier) {
+        currentHP -= 1 * multiplier;
+    }
+
+    public void resetHP() {
+        currentHP = totalHP;
+    }
+
     public int getTileX(){
         return x;
     }
 
     public int getTileY(){
         return y;
+    }
+
+    /**
+     * Returns the matching TileID of the Tile that the player is standing on
+     * @return
+     */
+    public int getPlayerTileID() {
+        return 5 * y + x;
+    }
+
+    public float getPercentageHP() {
+        return currentHP/totalHP;
     }
 
     public void drawPlayer(SpriteBatch batch) {
