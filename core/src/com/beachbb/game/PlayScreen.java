@@ -28,8 +28,15 @@ public class PlayScreen extends ScreenAdapter {
     private ConcurrentLinkedQueue<String> queue;
     private Deck playersDeck;
     private int currentMana;
+    private float p1hpPercent;
+    private float p2hpPercent;
     private ArrayList<AttackEntity> currentAttacks;
     private AttackConstructor attackConstructor;
+    private Texture uiTexture;
+    private TextureRegion hpBarP1;
+    private TextureRegion hpBarP2;
+    private TextureRegion manaBar;
+    private TextureRegion deckBar;
 
     public PlayScreen(BeachBB game, int p1, int p2, NetworkEntity playerNetwork, ConcurrentLinkedQueue<String> playerQueue) {
         bbbGame = game;
@@ -39,6 +46,8 @@ public class PlayScreen extends ScreenAdapter {
         queue = playerQueue;
         playersDeck = new Deck(p1);
         currentMana = 1000;
+        p1hpPercent = 100;
+        p2hpPercent = 100;
 
         // make a grid and add tiles to it
         grid = new ArrayList<>(30);
@@ -56,6 +65,13 @@ public class PlayScreen extends ScreenAdapter {
         }
 
         currentAttacks = new ArrayList<>(10);
+
+        // load sprites for UI elements
+        uiTexture = new Texture(Gdx.files.internal("bbb-bars.png"));
+        hpBarP1 = new TextureRegion(uiTexture, 60, 0, 616, 24);
+        hpBarP2 = new TextureRegion(uiTexture, 60, 0, 616, 24);
+        manaBar = new TextureRegion(uiTexture, 0, 0, 53, 152);
+        deckBar = new TextureRegion(uiTexture, 63, 70, 69, 82);
     }
 
     public void show() {
@@ -67,6 +83,11 @@ public class PlayScreen extends ScreenAdapter {
         if (state == SubState.PREP) {
             // to-do: make sure both players are synced and initiates countdown
             // move onto play state once countdown finishes
+            currentMana = 1000;
+            p1hpPercent = 100;
+            p2hpPercent = 100;
+            player1.resetHP();
+            player2.resetHP();
             state = SubState.PLAY;
         }
         final float currentDelta = delta; //gives me error if I try to pass delta into the second attack constructor. Not the first one tho?
@@ -82,6 +103,11 @@ public class PlayScreen extends ScreenAdapter {
                     player2.movePlayer(Integer.parseInt(movement));
                 } else if (commandType.equals("02")) { // Checks for attack command
                     currentAttacks.add(attackConstructor.buildAttack(Integer.parseInt(command.substring(2)), currentDelta, player2.getTileX(), player2.getTileY()));
+                }
+
+                if (commandType.equals("04")) { // Checks opponent's hp percentage
+                    String parseHP = command.substring(2);
+                    p2hpPercent = (Float.parseFloat(parseHP));
                 }
             }
 
@@ -159,6 +185,24 @@ public class PlayScreen extends ScreenAdapter {
             currentAttacks.clear();
             currentAttacks.addAll(attacksToKeep);
             attacksToKeep.clear();
+
+            // collision check for your player and danger tile; subtracts multiplier * 1 hp per tick
+            if (grid.get(player1.getPlayerTileID()).getDanger()) {
+                player1.takeDamage(2.0f);
+            }
+
+            // update hp values, then ends game when one player's hp reaches 0
+            p1hpPercent = player1.getPercentageHP();
+            network.sendOpponentHP(p1hpPercent);
+
+            if (p1hpPercent <= 0 || p2hpPercent <= 0) {
+                state = SubState.END;
+            }
+        }
+
+        if (state == SubState.END) {
+
+            //state = SubState.PREP;
         }
     }
 
@@ -169,18 +213,34 @@ public class PlayScreen extends ScreenAdapter {
 
         bbbGame.batch.draw(bbbGame.am.get(bbbGame.TEX_SCREEN_GAME, Texture.class), 0, 0);
 
+        // draw UI elements
+        bbbGame.batch.draw(hpBarP1, 172, 40, (616*p1hpPercent), 24);
+        bbbGame.batch.draw(hpBarP2, 172, 740, (616*p2hpPercent), 24);
+        bbbGame.batch.draw(deckBar, 860, 694);
+        bbbGame.batch.draw(manaBar, 876, 70);
+
+        playersDeck.DrawDeck(bbbGame.batch);
+
+        // draw grid, players, and effects
         for (Iterator<Tile> ti = grid.iterator(); ti.hasNext();) {
             Tile t = ti.next();
             t.drawTile(bbbGame.batch);
         }
 
         player2.drawPlayer(bbbGame.batch);
-        player1.drawPlayer(bbbGame.batch);
-
-        playersDeck.DrawDeck(bbbGame.batch);
 
         for (AttackEntity a : currentAttacks) {
             a.drawAttack(bbbGame.batch);
+        }
+
+        player1.drawPlayer(bbbGame.batch);
+
+        if (state == SubState.END) {
+            if (p1hpPercent <= 0) {
+                bbbGame.batch.draw(bbbGame.am.get(bbbGame.TEX_OVERLAY_LOSE, Texture.class), 0, 0);
+            } else {
+                bbbGame.batch.draw(bbbGame.am.get(bbbGame.TEX_OVERLAY_WIN, Texture.class), 0, 0);
+            }
         }
 
         bbbGame.batch.end();

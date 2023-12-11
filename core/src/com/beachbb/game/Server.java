@@ -28,6 +28,7 @@ public class Server extends Thread implements NetworkEntity{
     public void sendAttackCommand(int effectID){
         output.println("02"+effectID);
     }
+    public void sendOpponentHP(float p1hpPercent) { output.println("04"+p1hpPercent); }
 
     public void run(){
         try{

@@ -79,6 +79,10 @@ public class Tile extends Actor {
         }
     }
 
+    public boolean getDanger() {
+        return isDanger;
+    }
+
     public void drawTile(SpriteBatch batch) {
         batch.draw(tileSprite, tileCoordX, tileCoordY);
     }
