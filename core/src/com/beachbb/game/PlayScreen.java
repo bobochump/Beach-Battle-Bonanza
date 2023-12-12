@@ -22,7 +22,6 @@ public class PlayScreen extends ScreenAdapter {
     private Player player2;
     private enum SubState { PREP, PLAY, PAUSE, END };
     private SubState state;
-    private Server server;
     private ArrayList<Tile> grid;
     private NetworkEntity network;
     private ConcurrentLinkedQueue<String> queue;
@@ -37,6 +36,8 @@ public class PlayScreen extends ScreenAdapter {
     private TextureRegion hpBarP2;
     private TextureRegion manaBar;
     private TextureRegion deckBar;
+    private boolean oppRematch;
+    private boolean playerRematch;
 
     public PlayScreen(BeachBB game, int p1, int p2, NetworkEntity playerNetwork, ConcurrentLinkedQueue<String> playerQueue) {
         bbbGame = game;
@@ -48,6 +49,8 @@ public class PlayScreen extends ScreenAdapter {
         currentMana = 1000;
         p1hpPercent = 100;
         p2hpPercent = 100;
+        oppRematch = false;
+        playerRematch = false;
 
         // make a grid and add tiles to it
         grid = new ArrayList<>(30);
@@ -104,7 +107,6 @@ public class PlayScreen extends ScreenAdapter {
                 } else if (commandType.equals("02")) { // Checks for attack command
                     currentAttacks.add(attackConstructor.buildAttack(Integer.parseInt(command.substring(2)), currentDelta, player2.getTileX(), player2.getTileY()));
                 }
-
                 if (commandType.equals("04")) { // Checks opponent's hp percentage
                     String parseHP = command.substring(2);
                     p2hpPercent = (Float.parseFloat(parseHP));
@@ -159,9 +161,10 @@ public class PlayScreen extends ScreenAdapter {
                         case Input.Keys.NUMPAD_5:
                             playersDeck.changeSelection(4);
                             break;
+                        case Input.Keys.ENTER:
                         case Input.Keys.NUMPAD_ENTER:
                             int effectID = playersDeck.useCard(currentMana);
-                            if(effectID == -1) {
+                            if (effectID == -1) {
                                 //play sound to say that you cant use that card
                             } else {
                                 //summon the effect and send it to the other player
@@ -178,7 +181,7 @@ public class PlayScreen extends ScreenAdapter {
             for (AttackEntity a : currentAttacks) {
                 int returnVal = a.updateAttack(delta, grid);
                 attacksToKeep.add(a);
-                if(returnVal == 1){
+                if (returnVal == 1) {
                     attacksToKeep.remove(a);
                 }
             }
@@ -200,9 +203,41 @@ public class PlayScreen extends ScreenAdapter {
             }
         }
 
-        if (state == SubState.END) {
+        if (state == SubState.END) { // The state for when the game has ended
+            if (!queue.isEmpty()) {
+                String command;
+                command = queue.poll();
+                String commandType = command.substring(0, 2);
+                if (commandType.equals("98")){ // Checks for rematch command
+                    oppRematch = true;
+                }
+                if (commandType.equals("99")){ // Checks for exit command
+                    bbbGame.setScreen(new TitleScreen(bbbGame)); // Sets to titlescreen is opponent disconnected
+                }
+            }
+            if(playerRematch && oppRematch){ // Checks if both players accepted rematch.
+                System.out.println("Rematch accepted.");
+            }
+            Gdx.input.setInputProcessor(new InputAdapter() {
+                public boolean keyDown(int keycode) {
+                    switch(keycode){
+                        case Input.Keys.ESCAPE: // Checks if the player hit escape and ends the connection
+                            System.out.println("Ending connection.");
+                            network.sendEndConnection(); // Sends a message to tell the other player to end connection
+                            network.stopNetwork(); // Stops the network entity
+                            bbbGame.setScreen(new TitleScreen(bbbGame)); // Sets game back to title screen
+                            break;
+                        case Input.Keys.SPACE: // Checks if the player hit space and prepares for rematch
+                            if(!playerRematch) {
+                                System.out.println("Rematch initiated.");
+                                network.sendRematch(); // Sends a message to tell other player that they want to rematch
+                                playerRematch = true;
+                            }
 
-            //state = SubState.PREP;
+                    }
+                    return true;
+                }
+            });
         }
     }
 

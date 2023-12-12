@@ -19,10 +19,11 @@
 ### Open Issues
 - **[4]** Give each card a different effect
 - ** [5] ** Music and Sound Effects
+- 
 ## Jason
 ### Resolved Issues
-
+- **[1]** Networking component added with movement
+- **[2]** Setup connections other than localhost
+- **[3]** Setup no rematch feature
 ### Open Issues
-- **[1]**
-- **[2]**
-- **[3]**
+- **[4]** Setup rematch feature
