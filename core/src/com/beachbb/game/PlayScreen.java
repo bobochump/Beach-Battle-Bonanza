@@ -192,11 +192,13 @@ public class PlayScreen extends ScreenAdapter {
             // collision check for your player and danger tile; subtracts multiplier * 1 hp per tick
             if (grid.get(player1.getPlayerTileID()).getDanger()) {
                 player1.takeDamage(2.0f);
+
+                // update hp values, then ends game when one player's hp reaches 0
+                p1hpPercent = player1.getPercentageHP();
+                network.sendOpponentHP(p1hpPercent);
             }
 
-            // update hp values, then ends game when one player's hp reaches 0
-            p1hpPercent = player1.getPercentageHP();
-            network.sendOpponentHP(p1hpPercent);
+
 
             if (p1hpPercent <= 0 || p2hpPercent <= 0) {
                 state = SubState.END;
