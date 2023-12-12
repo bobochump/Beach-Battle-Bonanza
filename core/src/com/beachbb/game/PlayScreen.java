@@ -91,6 +91,8 @@ public class PlayScreen extends ScreenAdapter {
             p2hpPercent = 1;
             player1.resetHP();
             player2.resetHP();
+            p1hpPercent = player1.getPercentageHP();
+            network.sendOpponentHP(p1hpPercent);
             state = SubState.PLAY;
         }
         final float currentDelta = delta; //gives me error if I try to pass delta into the second attack constructor. Not the first one tho?
