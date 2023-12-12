@@ -2,14 +2,19 @@ package com.beachbb.game;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import java.util.concurrent.*;
 
 public class TitleScreen extends ScreenAdapter {
     private BeachBB bbbGame;
-    private boolean waitingOverlayActive;
-    private boolean instructionsOverlayActive;
-    private boolean creditsOverlayActive;
+    private boolean serverOverlayActive;
+    private boolean clientOverlayActive;
+    private Texture uiTitleTexture;
+    private TextureRegion titleSprite;
+    private TextureRegion serverSprite;
+    private TextureRegion clientSprite;
+    private TextureRegion waitingSprite;
     private int state = 0;
     private String charMessage;
     private ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<String>();
@@ -18,9 +23,15 @@ public class TitleScreen extends ScreenAdapter {
 
     public TitleScreen (BeachBB game) {
         bbbGame = game;
-        waitingOverlayActive = false;
-        instructionsOverlayActive = false;
-        creditsOverlayActive = false;
+        serverOverlayActive = false;
+        clientOverlayActive = false;
+
+        // load sprites for UI elements
+        uiTitleTexture = new Texture(Gdx.files.internal("bbb-ui-connection.png"));
+        titleSprite = new TextureRegion(uiTitleTexture, 358, 0, 471, 281);
+        serverSprite = new TextureRegion(uiTitleTexture, 0, 0, 357, 53);
+        clientSprite = new TextureRegion(uiTitleTexture, 0, 54, 357, 53);
+        waitingSprite = new TextureRegion(uiTitleTexture, 0, 109, 357, 58);
     }
     public void show() {
         Gdx.app.log("TitleScreen", "show");
@@ -33,11 +44,13 @@ public class TitleScreen extends ScreenAdapter {
             state = 1;
             network = new Server(address, 1234, queue);
             network.start();
+            serverOverlayActive = true;
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.C) && state == 0){
             state = 1;
             network = new Client(address, 1234, queue);
             network.start();
+            clientOverlayActive = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.NUM_1) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_1)) {
             if (state == 1) network.sendCharCommand(1);
@@ -111,9 +124,15 @@ public class TitleScreen extends ScreenAdapter {
 
         bbbGame.batch.begin();
         bbbGame.batch.draw(bbbGame.am.get(bbbGame.TEX_SCREEN_TITLE, Texture.class), 0, 0);
-        //if (creditsOverlayActive) {
-            // draw popup box
-        //}
+        if (serverOverlayActive) {
+            bbbGame.batch.draw(serverSprite, 0, 719);
+            bbbGame.batch.draw(waitingSprite, 882, 35);
+        }
+        if (clientOverlayActive) {
+            bbbGame.batch.draw(clientSprite, 0, 719);
+            bbbGame.batch.draw(waitingSprite, 882, 35);
+        }
+        bbbGame.batch.draw(titleSprite, 772, 494);
         bbbGame.batch.end();
 
     }
