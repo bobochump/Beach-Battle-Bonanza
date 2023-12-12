@@ -10,12 +10,11 @@ public class TitleScreen extends ScreenAdapter {
     private boolean waitingOverlayActive;
     private boolean instructionsOverlayActive;
     private boolean creditsOverlayActive;
-    private Client client;
-    private Server server;
     private int state = 0;
-
     private String charMessage;
     private ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<String>();
+    private NetworkEntity network;
+    private String address = "127.0.0.1";
 
     public TitleScreen (BeachBB game) {
         bbbGame = game;
@@ -32,17 +31,16 @@ public class TitleScreen extends ScreenAdapter {
         // later, change to wait for other player's input before moving to PlayScreen
         if (Gdx.input.isKeyPressed(Input.Keys.S) && state == 0) {
             state = 1;
-            server = new Server(1234, queue);
-            server.start();
+            network = new Server(address, 1234, queue);
+            network.start();
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.C) && state == 0){
-            state = 2;
-            client = new Client("127.0.0.1", 1234, queue);
-            client.start();
+            state = 1;
+            network = new Client(address, 1234, queue);
+            network.start();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.NUM_1) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_1)) {
-            if (state == 1) server.sendCharCommand(1);
-            if (state == 2) client.sendCharCommand(1);
+            if (state == 1) network.sendCharCommand(1);
             // Wait until the queue is not empty before proceeding
             while (queue.isEmpty()) {
                 // You can add a short delay here to avoid tight-looping and excessive CPU usage
@@ -54,12 +52,10 @@ public class TitleScreen extends ScreenAdapter {
             }
             // Now, you can safely poll the queue
             charMessage = queue.poll().substring(2);
-            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 1, Integer.parseInt(charMessage), server, queue));
-            if (state == 2) bbbGame.setScreen(new PlayScreen(bbbGame, 1, Integer.parseInt(charMessage), client, queue));
+            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 1, Integer.parseInt(charMessage), network, queue));
 
         } else if (Gdx.input.isKeyPressed(Input.Keys.NUM_2) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
-            if (state == 1) server.sendCharCommand(2);
-            if (state == 2) client.sendCharCommand(2);
+            if (state == 1) network.sendCharCommand(2);
             // Wait until the queue is not empty before proceeding
             while (queue.isEmpty()) {
                 // You can add a short delay here to avoid tight-looping and excessive CPU usage
@@ -71,12 +67,10 @@ public class TitleScreen extends ScreenAdapter {
             }
             // Now, you can safely poll the queue
             charMessage = queue.poll().substring(2);
-            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 2, Integer.parseInt(charMessage), server, queue));
-            if (state == 2) bbbGame.setScreen(new PlayScreen(bbbGame, 2, Integer.parseInt(charMessage), client, queue));
+            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 2, Integer.parseInt(charMessage), network, queue));
 
         } else if (Gdx.input.isKeyPressed(Input.Keys.NUM_3) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_3)) {
-            if (state == 1) server.sendCharCommand(3);
-            if (state == 2) client.sendCharCommand(3);
+            if (state == 1) network.sendCharCommand(3);
             // Wait until the queue is not empty before proceeding
             while (queue.isEmpty()) {
                 // You can add a short delay here to avoid tight-looping and excessive CPU usage
@@ -88,8 +82,7 @@ public class TitleScreen extends ScreenAdapter {
             }
             // Now, you can safely poll the queue
             charMessage = queue.poll().substring(2);
-            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 3, Integer.parseInt(charMessage), server, queue));
-            if (state == 2) bbbGame.setScreen(new PlayScreen(bbbGame, 3, Integer.parseInt(charMessage), client, queue));
+            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 3, Integer.parseInt(charMessage), network, queue));
         }
 
         /*

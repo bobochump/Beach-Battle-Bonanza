@@ -9,8 +9,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class LoadScreen extends ScreenAdapter {
     BeachBB bbbGame;
+    boolean titleShown;
     public LoadScreen(BeachBB game) {
         bbbGame = game;
+        titleShown = false;
     }
 
     public void show() {
@@ -33,7 +35,8 @@ public class LoadScreen extends ScreenAdapter {
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean touchUp(int x, int y, int pointer, int button) {
-            if (bbbGame.am.isFinished()) {
+            if (bbbGame.am.isFinished() && !titleShown) {
+                titleShown = true;
                 bbbGame.setScreen(new TitleScreen(bbbGame));
             }
             return true;

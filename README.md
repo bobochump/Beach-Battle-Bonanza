@@ -8,6 +8,13 @@
 - All three characters are using palette swaps of the Shark sprite as a placeholder
 - You can choose your own player for P1, and P2 is fixed for now
 
+## Connecting
+- Connecting happens on the character screen
+- First, one player should click 's' to be the server
+- Second, the other player should click 'c' to be the client
+- Then both players should click 1-3 in any order to choose a character
+- Game will then begin
+
 ## Player Controls
 - Control P1 using WASD
 - Control P2 using the arrow keys
