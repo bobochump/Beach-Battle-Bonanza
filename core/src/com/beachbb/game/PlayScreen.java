@@ -87,8 +87,8 @@ public class PlayScreen extends ScreenAdapter {
             // to-do: make sure both players are synced and initiates countdown
             // move onto play state once countdown finishes
             currentMana = 1000;
-            p1hpPercent = 100;
-            p2hpPercent = 100;
+            p1hpPercent = 1;
+            p2hpPercent = 1;
             player1.resetHP();
             player2.resetHP();
             state = SubState.PLAY;
@@ -197,8 +197,6 @@ public class PlayScreen extends ScreenAdapter {
                 p1hpPercent = player1.getPercentageHP();
                 network.sendOpponentHP(p1hpPercent);
             }
-
-
 
             if (p1hpPercent <= 0 || p2hpPercent <= 0) {
                 state = SubState.END;
