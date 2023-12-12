@@ -16,8 +16,8 @@ public class Card {
         name = card_name;
         cost = card_cost;
         effect_id = card_effect_id;
-        cardTexture = new Texture(Gdx.files.internal("bbb-card-front.png"));
-        cardSprite = new TextureRegion(cardTexture, 0, 139 * textureID, 252, 139);
+        cardTexture = new Texture(Gdx.files.internal("bbb-card-front2.png"));
+        cardSprite = new TextureRegion(cardTexture, 0, 138 * textureID, 252, 138);
     }
 
     public String getCardName() {

@@ -1,12 +1,11 @@
 ## June
 ### Resolved Issues
 - **[1]** Implement skeleton code, grid, basic movement
+- **[2]** Implement HP, Mana bars, and collision detection
+- **[3]** Add assets for cards
+- **[4]** Finish loading and title screen UI and assets
 
 ### Open Issues
-
-- **[2]** Implement HP and Mana bars
-- **[3]** Add placeholder assets for cards
-- **[4]** Finish loading and title screen UI and assets
 - **[5]** Add sprite idle and other animations, visual effects
 - **[6]** Replace basic assets with polished assets
 

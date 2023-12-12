@@ -3,21 +3,21 @@
 ### By: Zhong (June) Chai, Jason Bui, Camillia Moore
 
 ## Characters
-- For now, June's character is named Shark, Camillia's is named Mage, and Jason's is named Rat
-- Feel free to change these to your preferred characters' names...
-- All three characters are using palette swaps of the Shark sprite as a placeholder
-- You can choose your own player for P1, and P2 is fixed for now
+- Character 1: Shark. June's character; a slow/heavy attacker/tank
+- Character 2: Artificer. Camilila's character; uses control-style combat
+- Character 3: Bodega Worker. Jason's character; balanced/agile combat
 
-## Connecting
+## How to play: Connecting
 - Connecting happens on the character screen
-- First, one player should click 's' to be the server
-- Second, the other player should click 'c' to be the client
-- Then both players should click 1-3 in any order to choose a character
-- Game will then begin
+- First, one player should press 's' to be the server
+- Second, the other player should press 'c' to be the client
+- Then both players should press 1, 2, or 3 to choose a character
+- Game will begin once both players have selected a character
 
-## Player Controls
-- Control P1 using WASD
-- Control P2 using the arrow keys
+## How to play: In-game controls
+- Move character in the grid in the 4 cardinal directions using WASD
+- Cycle through cards on the right side of the screen by pressing up/down arrow keys, or by using the numpad directly
+- Fire an attack by pressing the Enter key
 
 ## Sprite Sizes and Locations
 - Mockup is posted on discord

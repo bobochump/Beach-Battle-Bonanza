@@ -11,11 +11,12 @@ public class BeachBB extends Game {
 	AssetManager am;
 	SpriteBatch batch;
 	public static final String TEX_SCREEN_LOADING = "base-loading-screen.png";
-	public static final String TEX_SCREEN_TITLE = "bbb-base-title.png";
+	public static final String TEX_SCREEN_TITLE = "bbb-title-artwork.png";
+	public static final String TEX_SHEET_TITLE = "bbb-ui-connection.png";
 	public static final String TEX_SCREEN_GAME = "bbb-base-game-screen.png";
 	public static final String TEX_SHEET_TILE = "bbb-base-tiles.png";
 	public static final String TEX_SHEET_CARD_BACK = "bbb-base-card-back.png";
-	public static final String TEX_SHEET_CARD_FRONT = "bbb-card-front.png";
+	public static final String TEX_SHEET_CARD_FRONT = "bbb-card-front2.png";
 	public static final String TEX_SHEET_PLAYER1 = "bbb-base-sprite-shark.png";
 	public static final String TEX_SHEET_PLAYER2 = "bbb-base-sprite-mage.png";
 	public static final String TEX_SHEET_PLAYER3 = "bbb-base-sprite-rat.png";
@@ -33,6 +34,7 @@ public class BeachBB extends Game {
 
 		am.load(TEX_SCREEN_LOADING, Texture.class);
 		am.load(TEX_SCREEN_TITLE, Texture.class);
+		am.load(TEX_SHEET_TITLE, Texture.class);
 		am.load(TEX_SCREEN_GAME, Texture.class);
 		am.load(TEX_SHEET_TILE, Texture.class);
 		am.load(TEX_SHEET_CARD_BACK, Texture.class);
