@@ -47,8 +47,8 @@ public class PlayScreen extends ScreenAdapter {
         queue = playerQueue;
         playersDeck = new Deck(p1);
         currentMana = 1000;
-        p1hpPercent = 100;
-        p2hpPercent = 100;
+        p1hpPercent = 1;
+        p2hpPercent = 1;
         oppRematch = false;
         playerRematch = false;
 
