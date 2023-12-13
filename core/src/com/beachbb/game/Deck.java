@@ -14,6 +14,8 @@ public class Deck {
     private Texture cardBackTexture;
     private TextureRegion cardBackSprite;
     private TextureRegion cardSelectedSprite;
+    private TextureRegion cardLowManaSprite;
+    private TextureRegion cardSelectedLowManaSprite;
     private int selectedCard;
     private int previousMana;
     private int maxCards;
@@ -60,6 +62,8 @@ public class Deck {
         cardBackTexture = new Texture(Gdx.files.internal("bbb-base-card-back.png"));
         cardBackSprite = new TextureRegion(cardBackTexture, 0, 0, 252, 139);
         cardSelectedSprite = new TextureRegion(cardBackTexture, 504, 0, 252, 139);
+        cardLowManaSprite = new TextureRegion(cardBackTexture, 252, 0, 252, 139);
+        cardSelectedLowManaSprite = new TextureRegion(cardBackTexture, 756, 0, 252, 139);
         cardGravity = 100.0F;  //might need to tweak these values
         cardTerminalVelocity = 500F;
         cardSpeed = new float[] {0, 0, 0, 0, 0};
@@ -137,7 +141,7 @@ public class Deck {
         }
     }
 
-    public void DrawDeck(SpriteBatch batch, float delta) {
+    public void DrawDeck(SpriteBatch batch, float delta, float currentMana) {
         for(int i = 0; i < 5; i++) {
             if(cardRenderedPos[i] > 20 + ((139 + 11) * i)){
                 cardSpeed[i] += cardGravity * delta;
@@ -153,9 +157,17 @@ public class Deck {
             if(cards.size() > i) {
                 Card cardToDraw = cards.get(i);
                 if (selectedCard == i) {
-                    batch.draw(cardSelectedSprite, 979, cardRenderedPos[i]);
+                    if(cards.get(i).getCardCost() > currentMana) {
+                        batch.draw(cardSelectedLowManaSprite, 979, cardRenderedPos[i]);
+                    } else {
+                        batch.draw(cardSelectedSprite, 979, cardRenderedPos[i]);
+                    }
                 } else {
-                    batch.draw(cardBackSprite, 979, cardRenderedPos[i]);
+                    if(cards.get(i).getCardCost() > currentMana) {
+                        batch.draw(cardLowManaSprite, 979, cardRenderedPos[i]);
+                    } else {
+                        batch.draw(cardBackSprite, 979, cardRenderedPos[i]);
+                    }
                 }
                 cardToDraw.drawCard(batch, 979, (int) cardRenderedPos[i]);
             }

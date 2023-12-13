@@ -306,7 +306,7 @@ public class PlayScreen extends ScreenAdapter {
         bbbGame.batch.draw(deckBar, 860, 694, 69, (82*deckBarPercent));
         bbbGame.batch.draw(manaBar, 876, 70, 54, (152*manaBarPercent));
 
-        playersDeck.DrawDeck(bbbGame.batch, delta);
+        playersDeck.DrawDeck(bbbGame.batch, delta, currentMana);
 
         // draw grid, players, and effects
         for (Iterator<Tile> ti = grid.iterator(); ti.hasNext();) {
