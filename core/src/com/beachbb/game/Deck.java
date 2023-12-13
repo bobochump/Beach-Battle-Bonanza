@@ -17,6 +17,11 @@ public class Deck {
     private int selectedCard;
     private int previousMana;
     private int maxCards;
+    //vars used to render the cards sliding down
+    private float cardGravity;
+    private float cardTerminalVelocity;
+    private float[] cardSpeed;
+    private float[] cardRenderedPos;
     public Deck(int characterNum) {
         selectedCard = 0;
         previousMana = 0;
@@ -55,6 +60,10 @@ public class Deck {
         cardBackTexture = new Texture(Gdx.files.internal("bbb-base-card-back.png"));
         cardBackSprite = new TextureRegion(cardBackTexture, 0, 0, 252, 139);
         cardSelectedSprite = new TextureRegion(cardBackTexture, 504, 0, 252, 139);
+        cardGravity = 100.0F;  //might need to tweak these values
+        cardTerminalVelocity = 500F;
+        cardSpeed = new float[] {0, 0, 0, 0, 0};
+        cardRenderedPos = new float[] {20 + ((139 + 11) * 0), 20 + ((139 + 11) * 1), 20 + ((139 + 11) * 2), 20 + ((139 + 11) * 3), 20 + ((139 + 11) * 4)};
     }
     void changeSelection(int newCard) {
         //-1 is go up a card, -2 is go down a card, 0-4 is go to that card
@@ -90,6 +99,11 @@ public class Deck {
             //check if deck is empty. If so, need to shuffle the discard pile back into it
             if(cards.isEmpty()) {
                 shuffle();
+                cardRenderedPos = new float[] {20 + ((139 + 11) * 0), 20 + ((139 + 11) * 1), 20 + ((139 + 11) * 2), 20 + ((139 + 11) * 3), 20 + ((139 + 11) * 4)};
+            } else {
+                for(int i = selectedCard; i < 5; i++){
+                    cardRenderedPos[i] += 139 + 11;
+                }
             }
             previousMana = cardToUse.getCardCost();
             return cardToUse.getEffectID();
@@ -114,16 +128,27 @@ public class Deck {
         }
     }
 
-    public void DrawDeck(SpriteBatch batch) {
+    public void DrawDeck(SpriteBatch batch, float delta) {
         for(int i = 0; i < 5; i++) {
+            if(cardRenderedPos[i] > 20 + ((139 + 11) * i)){
+                cardSpeed[i] += cardGravity * delta;
+                if (cardSpeed[i] > cardTerminalVelocity) {
+                    cardSpeed[i] = cardTerminalVelocity;
+                }
+                cardRenderedPos[i] -= cardSpeed[i];
+            }
+            if(cardRenderedPos[i] < 20 + ((139 + 11) * i)) {
+                cardRenderedPos[i] = 20 + ((139 + 11) * i);
+                cardSpeed[i] = 0;
+            }
             if(cards.size() > i) {
                 Card cardToDraw = cards.get(i);
                 if (selectedCard == i) {
-                    batch.draw(cardSelectedSprite, 979, 20 + ((139 + 11) * i));
+                    batch.draw(cardSelectedSprite, 979, cardRenderedPos[i]);
                 } else {
-                    batch.draw(cardBackSprite, 979, 20 + ((139 + 11) * i));
+                    batch.draw(cardBackSprite, 979, cardRenderedPos[i]);
                 }
-                cardToDraw.drawCard(batch, 979, 20 + ((139 + 11) * i));
+                cardToDraw.drawCard(batch, 979, (int) cardRenderedPos[i]);
             }
         }
     }
