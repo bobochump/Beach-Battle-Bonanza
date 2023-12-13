@@ -26,9 +26,12 @@ public class PlayScreen extends ScreenAdapter {
     private NetworkEntity network;
     private ConcurrentLinkedQueue<String> queue;
     private Deck playersDeck;
-    private int currentMana;
+    private float currentMana;
+    private float maxMana;
     private float p1hpPercent;
     private float p2hpPercent;
+    private float manaBarPercent;
+    private float deckBarPercent;
     private ArrayList<AttackEntity> currentAttacks;
     private AttackConstructor attackConstructor;
     private Texture uiTexture;
@@ -46,7 +49,10 @@ public class PlayScreen extends ScreenAdapter {
         network = playerNetwork;
         queue = playerQueue;
         playersDeck = new Deck(p1);
-        currentMana = 1000;
+        currentMana = 20;
+        maxMana = 20;
+        manaBarPercent = 1;
+        deckBarPercent = 1;
         p1hpPercent = 1;
         p2hpPercent = 1;
         oppRematch = false;
@@ -86,13 +92,14 @@ public class PlayScreen extends ScreenAdapter {
         if (state == SubState.PREP) {
             // to-do: make sure both players are synced and initiates countdown
             // move onto play state once countdown finishes
-            currentMana = 1000;
+            currentMana = 20;
+            maxMana = 20;
+            manaBarPercent = 1;
+            deckBarPercent = 1;
             p1hpPercent = 1;
             p2hpPercent = 1;
             player1.resetHP();
             player2.resetHP();
-            p1hpPercent = player1.getPercentageHP();
-            network.sendOpponentHP(p1hpPercent);
             state = SubState.PLAY;
         }
         final float currentDelta = delta; //gives me error if I try to pass delta into the second attack constructor. Not the first one tho?
@@ -115,6 +122,43 @@ public class PlayScreen extends ScreenAdapter {
                     p2hpPercent = (Float.parseFloat(parseHP));
                 }
             }
+
+            //update the current mana
+            currentMana += delta;
+            if(currentMana > maxMana){
+                currentMana = maxMana;
+            }
+
+            //code to animate the mana bar, instead of just teleporting between values
+            float manaBarDecreaseSpeed = 1.5F;
+            if(currentMana / maxMana > manaBarPercent) {
+                manaBarPercent += manaBarDecreaseSpeed * delta;
+                if(currentMana / maxMana < manaBarPercent) {
+                    manaBarPercent = currentMana / maxMana;
+                }
+            }
+            if(currentMana / maxMana < manaBarPercent) {
+                manaBarPercent -= manaBarDecreaseSpeed * delta;
+                if(currentMana / maxMana > manaBarPercent) {
+                    manaBarPercent = currentMana / maxMana;
+                }
+            }
+
+            //likewise, update the deck remaining bar
+            float deckBarDecreaseSpeed = 1.5F;
+            if(playersDeck.getCardsRemainingPercentage() > deckBarPercent) {
+                deckBarPercent += deckBarDecreaseSpeed * delta;
+                if(playersDeck.getCardsRemainingPercentage() < deckBarPercent) {
+                    deckBarPercent = playersDeck.getCardsRemainingPercentage();
+                }
+            }
+            if(playersDeck.getCardsRemainingPercentage() < deckBarPercent) {
+                deckBarPercent -= deckBarDecreaseSpeed * delta;
+                if(playersDeck.getCardsRemainingPercentage() > deckBarPercent) {
+                    deckBarPercent = playersDeck.getCardsRemainingPercentage();
+                }
+            }
+
 
             Gdx.input.setInputProcessor(new InputAdapter() {
                 public boolean keyDown(int keycode) {
@@ -166,13 +210,15 @@ public class PlayScreen extends ScreenAdapter {
                             break;
                         case Input.Keys.ENTER:
                         case Input.Keys.NUMPAD_ENTER:
-                            int effectID = playersDeck.useCard(currentMana);
+                            int effectID = playersDeck.useCard((int) currentMana);
                             if (effectID == -1) {
                                 //play sound to say that you cant use that card
                             } else {
                                 //summon the effect and send it to the other player
                                 currentAttacks.add(attackConstructor.buildAttack(effectID, currentDelta, player1.getTileX(), player1.getTileY()));
                                 network.sendAttackCommand(effectID);
+                                //subtract mana cost
+                                currentMana -= playersDeck.getUsedCardMana();
                             }
                     }
                     return true;
@@ -257,10 +303,10 @@ public class PlayScreen extends ScreenAdapter {
         // draw UI elements
         bbbGame.batch.draw(hpBarP1, 172, 40, (616*p1hpPercent), 24);
         bbbGame.batch.draw(hpBarP2, 172, 740, (616*p2hpPercent), 24);
-        bbbGame.batch.draw(deckBar, 860, 694);
-        bbbGame.batch.draw(manaBar, 876, 70);
+        bbbGame.batch.draw(deckBar, 860, 694, 69, (82*deckBarPercent));
+        bbbGame.batch.draw(manaBar, 876, 70, 54, (152*manaBarPercent));
 
-        playersDeck.DrawDeck(bbbGame.batch);
+        playersDeck.DrawDeck(bbbGame.batch, delta, currentMana);
 
         // draw grid, players, and effects
         for (Iterator<Tile> ti = grid.iterator(); ti.hasNext();) {
