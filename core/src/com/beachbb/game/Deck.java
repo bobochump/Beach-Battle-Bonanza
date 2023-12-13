@@ -16,6 +16,7 @@ public class Deck {
     private TextureRegion cardSelectedSprite;
     private int selectedCard;
     private int previousMana;
+    private int maxCards;
     public Deck(int characterNum) {
         selectedCard = 0;
         previousMana = 0;
@@ -23,28 +24,31 @@ public class Deck {
         discard = new ArrayList<Card>();
         switch (characterNum) {
             case 3: //Bodega Worker
-                discard.add(new Card("card 11", 1, 11, 10));
-                discard.add(new Card("card 12", 1, 12, 11));
-                discard.add(new Card("card 13", 1, 13, 12));
-                discard.add(new Card("card 14", 1, 14, 13));
-                discard.add(new Card("card 15", 1, 15, 14));
-                discard.add(new Card("card 1", 1, 1, 10));
+                discard.add(new Card("Basic Attack", 1, 11, 10));
+                discard.add(new Card("Basic Attack", 1, 12, 11));
+                discard.add(new Card("Basic Attack", 1, 13, 12));
+                discard.add(new Card("Basic Attack", 1, 14, 13));
+                discard.add(new Card("Basic Attack", 1, 15, 14));
+                discard.add(new Card("Basic Attack", 1, 1, 10));
+                maxCards = 6;
                 break;
             case 2: //Artificer
-                discard.add(new Card("card 6", 1, 6, 5));
-                discard.add(new Card("card 7", 1, 7, 6));
-                discard.add(new Card("card 8", 1, 8, 7));
-                discard.add(new Card("card 9", 1, 9, 8));
-                discard.add(new Card("card 10", 16, 10, 9));
-                discard.add(new Card("card 11", 1, 11, 5));
+                discard.add(new Card("Basic Attack", 1, 6, 5));
+                discard.add(new Card("Basic Attack", 1, 7, 6));
+                discard.add(new Card("Basic Attack", 1, 8, 7));
+                discard.add(new Card("Basic Attack", 1, 9, 8));
+                discard.add(new Card("MEGA DEATH LASER", 16, 10, 9));
+                discard.add(new Card("Basic Attack", 1, 11, 5));
+                maxCards = 6;
                 break;
             default: //default is character 1, the Shark
-                discard.add(new Card("card 1", 1, 1, 0));
-                discard.add(new Card("card 2", 1, 2, 1));
-                discard.add(new Card("card 3", 1, 3, 2));
-                discard.add(new Card("card 4", 1, 4, 3));
-                discard.add(new Card("card 5", 1, 5, 4));
-                discard.add(new Card("card 6", 1, 6, 0));
+                discard.add(new Card("Basic Attack", 1, 1, 0));
+                discard.add(new Card("Basic Attack", 1, 2, 1));
+                discard.add(new Card("Basic Attack", 1, 3, 2));
+                discard.add(new Card("Basic Attack", 1, 4, 3));
+                discard.add(new Card("Basic Attack", 1, 5, 4));
+                discard.add(new Card("Basic Attack", 1, 6, 0));
+                maxCards = 6;
                 break;
         }
         shuffle();
@@ -94,6 +98,9 @@ public class Deck {
 
     int getUsedCardMana() {
         return previousMana;
+    }
+    float getCardsRemainingPercentage() {
+        return (float) cards.size() / maxCards;
     }
 
     void shuffle() {

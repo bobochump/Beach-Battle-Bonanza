@@ -31,6 +31,7 @@ public class PlayScreen extends ScreenAdapter {
     private float p1hpPercent;
     private float p2hpPercent;
     private float manaBarPercent;
+    private float deckBarPercent;
     private ArrayList<AttackEntity> currentAttacks;
     private AttackConstructor attackConstructor;
     private Texture uiTexture;
@@ -51,6 +52,7 @@ public class PlayScreen extends ScreenAdapter {
         currentMana = 20;
         maxMana = 20;
         manaBarPercent = 1;
+        deckBarPercent = 1;
         p1hpPercent = 1;
         p2hpPercent = 1;
         oppRematch = false;
@@ -93,6 +95,7 @@ public class PlayScreen extends ScreenAdapter {
             currentMana = 20;
             maxMana = 20;
             manaBarPercent = 1;
+            deckBarPercent = 1;
             p1hpPercent = 1;
             p2hpPercent = 1;
             player1.resetHP();
@@ -125,6 +128,8 @@ public class PlayScreen extends ScreenAdapter {
             if(currentMana > maxMana){
                 currentMana = maxMana;
             }
+
+            //code to animate the mana bar, instead of just teleporting between values
             float manaBarDecreaseSpeed = 1.5F;
             if(currentMana / maxMana > manaBarPercent) {
                 manaBarPercent += manaBarDecreaseSpeed * delta;
@@ -138,6 +143,22 @@ public class PlayScreen extends ScreenAdapter {
                     manaBarPercent = currentMana / maxMana;
                 }
             }
+
+            //likewise, update the deck remaining bar
+            float deckBarDecreaseSpeed = 1.5F;
+            if(playersDeck.getCardsRemainingPercentage() > deckBarPercent) {
+                deckBarPercent += deckBarDecreaseSpeed * delta;
+                if(playersDeck.getCardsRemainingPercentage() < deckBarPercent) {
+                    deckBarPercent = playersDeck.getCardsRemainingPercentage();
+                }
+            }
+            if(playersDeck.getCardsRemainingPercentage() < deckBarPercent) {
+                deckBarPercent -= deckBarDecreaseSpeed * delta;
+                if(playersDeck.getCardsRemainingPercentage() > deckBarPercent) {
+                    deckBarPercent = playersDeck.getCardsRemainingPercentage();
+                }
+            }
+
 
             Gdx.input.setInputProcessor(new InputAdapter() {
                 public boolean keyDown(int keycode) {
@@ -282,7 +303,7 @@ public class PlayScreen extends ScreenAdapter {
         // draw UI elements
         bbbGame.batch.draw(hpBarP1, 172, 40, (616*p1hpPercent), 24);
         bbbGame.batch.draw(hpBarP2, 172, 740, (616*p2hpPercent), 24);
-        bbbGame.batch.draw(deckBar, 860, 694);
+        bbbGame.batch.draw(deckBar, 860, 694, 69, (82*deckBarPercent));
         bbbGame.batch.draw(manaBar, 876, 70, 54, (152*manaBarPercent));
 
         playersDeck.DrawDeck(bbbGame.batch);
