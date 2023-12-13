@@ -9,59 +9,53 @@ import com.beachbb.game.Tile;
 import java.util.ArrayList;
 
 public class Laser3Wide implements AttackEntity {
-    final private float initialDelta;
-    private int sourceX;
+    private int sourceX;  //used for where on the grid the attack comes from
     private int sourceY;
-    private float x; //center of where to draw attack
+    private float x; //screen co-ords for where to draw the attack
     private float y;
-    private int tileX;
-    private int tileY;
-    private int prevTileX;
-    private int prevTileY;
     private boolean enemyAttack; //true if coming from enemy, false if coming from player
-    private Texture laser;
-    private int flag;
-    private float currentDelta;
+    private Texture laser; //texture
+                            //TODO: Get proper texture for the laser
+    private int flag; //used for moving between different stages of the attack
+    private float timeElapsed;  //used to keep track of how long the attack has gone for
 
     public Laser3Wide(float delta, int playerX, int playerY){
-        initialDelta = delta;
         sourceX = playerX;
         sourceY = playerY;
         enemyAttack = sourceY > 2;
-        tileX = sourceX;
         if(enemyAttack){
-            tileY = sourceY - 1;
+            sourceY -= 1;
         } else {
-            tileY = sourceY + 1;
+            sourceY += 1;
         }
-        x = tileX * 126;
-        y = tileY * 110;
-        prevTileX = -1;
-        prevTileY = -1;
+        x = sourceX * 126;
+        y = sourceY * 110;
         flag = 0;
-        currentDelta = 0;
+        timeElapsed = 0;
         laser = new Texture(Gdx.files.internal("bbb-bullet.png"));
     }
     public int updateAttack(float delta, ArrayList<Tile> grid){
-        //float currentDelta = delta - initialDelta;
-        currentDelta += delta;
+        timeElapsed += delta;
 
-        if(flag == 0 && currentDelta > 0.25) {
+        //Give a bit of startup lag, and start with only center column
+        if(flag == 0 && timeElapsed > 0.25) {
             flag = 1;
             if(enemyAttack){
-                for (int i = tileY; i >= 0; i--){
+                for (int i = sourceY; i >= 0; i--){
                     grid.get(i * 5 + sourceX).setDanger(true);
                 }
             } else {
-                for (int i = tileY; i < 6; i++){
+                for (int i = sourceY; i < 6; i++){
                     grid.get(i * 5 + sourceX).setDanger(true);
                 }
             }
         }
-        if(flag == 1 && currentDelta > 0.5) {
+
+        //After a bit, change to 3 wide
+        if(flag == 1 && timeElapsed > 0.5) {
             flag = 2;
             if(enemyAttack){
-                for (int i = tileY; i >= 0; i--){
+                for (int i = sourceY; i >= 0; i--){
                     if(sourceX != 0){
                         grid.get(i * 5 + sourceX - 1).setDanger(true);
                     }
@@ -70,7 +64,7 @@ public class Laser3Wide implements AttackEntity {
                     }
                 }
             } else {
-                for (int i = tileY; i < 6; i++){
+                for (int i = sourceY; i < 6; i++){
                     if(sourceX != 0){
                         grid.get(i * 5 + sourceX - 1).setDanger(true);
                     }
@@ -80,10 +74,12 @@ public class Laser3Wide implements AttackEntity {
                 }
             }
         }
-        if(flag == 2 && currentDelta > 3.0) {
+
+        //After a bit longer, attack ends
+        if(flag == 2 && timeElapsed > 3.0) {
             flag = 3;
             if(enemyAttack){
-                for (int i = tileY; i >= 0; i--){
+                for (int i = sourceY; i >= 0; i--){
                     if(sourceX != 0){
                         grid.get(i * 5 + sourceX - 1).setDanger(false);
                     }
@@ -93,7 +89,7 @@ public class Laser3Wide implements AttackEntity {
                     }
                 }
             } else {
-                for (int i = tileY; i < 6; i++){
+                for (int i = sourceY; i < 6; i++){
                     if(sourceX != 0){
                         grid.get(i * 5 + sourceX - 1).setDanger(false);
                     }
@@ -105,6 +101,7 @@ public class Laser3Wide implements AttackEntity {
             }
             return 1;
         }
+
         return 0;
     }
     public void drawAttack(SpriteBatch batch){

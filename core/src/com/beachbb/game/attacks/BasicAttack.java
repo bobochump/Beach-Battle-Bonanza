@@ -9,20 +9,18 @@ import com.beachbb.game.Tile;
 import java.util.ArrayList;
 
 public class BasicAttack implements AttackEntity {
-    final private float initialDelta;
-    private int sourceX;
+    private int sourceX; //used to keep track of where the attack originated from
     private int sourceY;
     private float x; //center of where to draw attack
     private float y;
-    private int tileX;
+    private int tileX;  //used to keep track of which tile the attack is on
     private int tileY;
-    private int prevTileX;
+    private int prevTileX;  //used to keep track of where the attack was last update
     private int prevTileY;
     private boolean enemyAttack; //true if coming from enemy, false if coming from player
-    private Texture bullet;
+    private Texture bullet;  //texture
 
     public BasicAttack(float delta, int playerX, int playerY){
-        initialDelta = delta;
         sourceX = playerX;
         sourceY = playerY;
         enemyAttack = sourceY > 2;
@@ -47,8 +45,6 @@ public class BasicAttack implements AttackEntity {
         }
 
         //update tileX and tileY
-//        tileX = (int) (x - 171 - 63) % 126;
-//        tileY = (int) (y - 76 - 55) % 110;
         tileX = (int) (x + 63) / 126;
         tileY = (int) (y + 55) / 110;
         if((tileY > 5) || (tileY < 0) || (tileX > 4) || (tileX < 0) || (y < -55)){
@@ -57,8 +53,6 @@ public class BasicAttack implements AttackEntity {
         }
 
         if(prevTileX != tileX || prevTileY != tileY){
-//            System.out.println("PrevTileX = " + prevTileX + ", PrevTileY = " + prevTileY);
-//            System.out.println("TileX = " + tileX + ", TileY = " + tileY + "\n");
             grid.get(tileY * 5 + tileX).setDanger(true);
             if(prevTileY >= 0 || prevTileX >= 0){
                 grid.get(prevTileY * 5 + prevTileX).setDanger(false);

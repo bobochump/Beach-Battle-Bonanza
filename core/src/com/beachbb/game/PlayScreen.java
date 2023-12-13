@@ -96,6 +96,7 @@ public class PlayScreen extends ScreenAdapter {
             state = SubState.PLAY;
         }
         final float currentDelta = delta; //gives me error if I try to pass delta into the second attack constructor. Not the first one tho?
+                                            //TODO: Figure out why this error even happens, and find a better solution
         if (state == SubState.PLAY) {
             if (!queue.isEmpty()) {
                 String command;
