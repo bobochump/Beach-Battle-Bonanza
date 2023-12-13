@@ -69,7 +69,7 @@ public class Deck {
         //-1 is go up a card, -2 is go down a card, 0-4 is go to that card
         if(newCard == -1) {
             selectedCard += 1;
-            if(selectedCard == 5) {
+            if(selectedCard == 5 || selectedCard >= cards.size()) {
                 selectedCard = 0;
             }
         }
@@ -78,9 +78,15 @@ public class Deck {
             if(selectedCard == -1) {
                 selectedCard = 4;
             }
+            if(selectedCard >= cards.size()) {
+                selectedCard = cards.size() - 1;
+            }
         } else {
-            selectedCard = newCard;
+            if(newCard < cards.size()){
+                selectedCard = newCard;
+            }
         }
+
     }
 
     int useCard(int currentMana) {
@@ -106,6 +112,9 @@ public class Deck {
                 }
             }
             previousMana = cardToUse.getCardCost();
+            if(selectedCard >= cards.size()) {
+                selectedCard = cards.size() - 1;
+            }
             return cardToUse.getEffectID();
         }
     }
