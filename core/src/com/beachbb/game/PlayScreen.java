@@ -110,7 +110,7 @@ public class PlayScreen extends ScreenAdapter {
                 } else if (commandType.equals("02")) { // Checks for attack command
                     currentAttacks.add(attackConstructor.buildAttack(Integer.parseInt(command.substring(2)), currentDelta, player2.getTileX(), player2.getTileY()));
                 }
-                if (commandType.equals("04")) { // Checks opponent's hp percentage
+                else if (commandType.equals("04")) { // Checks opponent's hp percentage
                     String parseHP = command.substring(2);
                     p2hpPercent = (Float.parseFloat(parseHP));
                 }
@@ -220,16 +220,19 @@ public class PlayScreen extends ScreenAdapter {
             }
             if(playerRematch && oppRematch){ // Checks if both players accepted rematch.
                 System.out.println("Rematch accepted.");
+                bbbGame.setScreen(new RematchScreen(bbbGame, network, queue));
             }
             Gdx.input.setInputProcessor(new InputAdapter() {
                 public boolean keyDown(int keycode) {
                     switch(keycode){
                         case Input.Keys.ESCAPE: // Checks if the player hit escape and ends the connection
-                            System.out.println("Ending connection.");
-                            network.sendEndConnection(); // Sends a message to tell the other player to end connection
-                            network.stopNetwork(); // Stops the network entity
-                            bbbGame.setScreen(new TitleScreen(bbbGame)); // Sets game back to title screen
-                            break;
+                            if(!(playerRematch && oppRematch)) {
+                                System.out.println("Ending connection.");
+                                network.sendEndConnection(); // Sends a message to tell the other player to end connection
+                                network.stopNetwork(); // Stops the network entity
+                                bbbGame.setScreen(new TitleScreen(bbbGame)); // Sets game back to title screen
+                                break;
+                            }
                         case Input.Keys.SPACE: // Checks if the player hit space and prepares for rematch
                             if(!playerRematch) {
                                 System.out.println("Rematch initiated.");
