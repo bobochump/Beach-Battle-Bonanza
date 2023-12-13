@@ -26,9 +26,11 @@ public class PlayScreen extends ScreenAdapter {
     private NetworkEntity network;
     private ConcurrentLinkedQueue<String> queue;
     private Deck playersDeck;
-    private int currentMana;
+    private float currentMana;
+    private float maxMana;
     private float p1hpPercent;
     private float p2hpPercent;
+    private float manaBarPercent;
     private ArrayList<AttackEntity> currentAttacks;
     private AttackConstructor attackConstructor;
     private Texture uiTexture;
@@ -46,7 +48,9 @@ public class PlayScreen extends ScreenAdapter {
         network = playerNetwork;
         queue = playerQueue;
         playersDeck = new Deck(p1);
-        currentMana = 1000;
+        currentMana = 20;
+        maxMana = 20;
+        manaBarPercent = 1;
         p1hpPercent = 1;
         p2hpPercent = 1;
         oppRematch = false;
@@ -86,13 +90,13 @@ public class PlayScreen extends ScreenAdapter {
         if (state == SubState.PREP) {
             // to-do: make sure both players are synced and initiates countdown
             // move onto play state once countdown finishes
-            currentMana = 1000;
+            currentMana = 20;
+            maxMana = 20;
+            manaBarPercent = 1;
             p1hpPercent = 1;
             p2hpPercent = 1;
             player1.resetHP();
             player2.resetHP();
-            p1hpPercent = player1.getPercentageHP();
-            network.sendOpponentHP(p1hpPercent);
             state = SubState.PLAY;
         }
         final float currentDelta = delta; //gives me error if I try to pass delta into the second attack constructor. Not the first one tho?
@@ -113,6 +117,25 @@ public class PlayScreen extends ScreenAdapter {
                 else if (commandType.equals("04")) { // Checks opponent's hp percentage
                     String parseHP = command.substring(2);
                     p2hpPercent = (Float.parseFloat(parseHP));
+                }
+            }
+
+            //update the current mana
+            currentMana += delta;
+            if(currentMana > maxMana){
+                currentMana = maxMana;
+            }
+            float manaBarDecreaseSpeed = 1.5F;
+            if(currentMana / maxMana > manaBarPercent) {
+                manaBarPercent += manaBarDecreaseSpeed * delta;
+                if(currentMana / maxMana < manaBarPercent) {
+                    manaBarPercent = currentMana / maxMana;
+                }
+            }
+            if(currentMana / maxMana < manaBarPercent) {
+                manaBarPercent -= manaBarDecreaseSpeed * delta;
+                if(currentMana / maxMana > manaBarPercent) {
+                    manaBarPercent = currentMana / maxMana;
                 }
             }
 
@@ -166,13 +189,15 @@ public class PlayScreen extends ScreenAdapter {
                             break;
                         case Input.Keys.ENTER:
                         case Input.Keys.NUMPAD_ENTER:
-                            int effectID = playersDeck.useCard(currentMana);
+                            int effectID = playersDeck.useCard((int) currentMana);
                             if (effectID == -1) {
                                 //play sound to say that you cant use that card
                             } else {
                                 //summon the effect and send it to the other player
                                 currentAttacks.add(attackConstructor.buildAttack(effectID, currentDelta, player1.getTileX(), player1.getTileY()));
                                 network.sendAttackCommand(effectID);
+                                //subtract mana cost
+                                currentMana -= playersDeck.getUsedCardMana();
                             }
                     }
                     return true;
@@ -258,7 +283,7 @@ public class PlayScreen extends ScreenAdapter {
         bbbGame.batch.draw(hpBarP1, 172, 40, (616*p1hpPercent), 24);
         bbbGame.batch.draw(hpBarP2, 172, 740, (616*p2hpPercent), 24);
         bbbGame.batch.draw(deckBar, 860, 694);
-        bbbGame.batch.draw(manaBar, 876, 70);
+        bbbGame.batch.draw(manaBar, 876, 70, 54, (152*manaBarPercent));
 
         playersDeck.DrawDeck(bbbGame.batch);
 
