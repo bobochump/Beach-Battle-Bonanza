@@ -17,9 +17,9 @@ public class BeachBB extends Game {
 	public static final String TEX_SHEET_TILE = "bbb-base-tiles.png";
 	public static final String TEX_SHEET_CARD_BACK = "bbb-base-card-back.png";
 	public static final String TEX_SHEET_CARD_FRONT = "bbb-card-front2.png";
-	public static final String TEX_SHEET_PLAYER1 = "bbb-base-sprite-shark.png";
-	public static final String TEX_SHEET_PLAYER2 = "bbb-base-sprite-mage.png";
-	public static final String TEX_SHEET_PLAYER3 = "bbb-base-sprite-rat.png";
+	public static final String TEX_SHEET_PLAYER1 = "bbb-sprite-sheet-shark.png";
+	public static final String TEX_SHEET_PLAYER2 = "bbb-sprite-sheet-mage.png";
+	public static final String TEX_SHEET_PLAYER3 = "bbb-sprite-sheet-rat.png";
 	public static final String TEX_SHEET_UI = "bbb-bars.png";
 	public static final String TEX_SHEET_BULLET = "bbb-bullet.png";
 	public static final String TEX_OVERLAY_WAITING = "bbb-base-waiting.png";
