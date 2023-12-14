@@ -19,19 +19,11 @@
 - Cycle through cards on the right side of the screen by pressing up/down arrow keys, or by using the numpad directly
 - Fire an attack by pressing the Enter key
 
-## Sprite Sizes and Locations
-- Mockup is posted on discord
-- tile size: 117 x 101
-- card size: 252 x 139
-- shark sprite: 117 x 146
+## Credits
+- All artwork and assets by Zhong (June) Chai
+- All music by Camillia Moore
 
-### Locations (NOT converted to libgdx coordinate system)
-- tile first bottom corner: 171, 724
-- tile between: 9 horizontal, 9 vertical
-- cards left box: 861, 25
-- card backing: 979, 20
-- card backing between: 11 vertical
-- mana last bottom corner: 876, 730
-- mana box size: 54, 20
-- mana between: 7 vertical
-- shark sprite bottom corner: 170, 504
+## License
+<img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-nd.png" width="100px" alt="Creative Commons BY-NC-ND icon" />
+
+This game is licensed under [Creative Commons BY-NC-ND](https://creativecommons.org/licenses/by-nc-nd/4.0/): Copying and distribution of the contents of this game is allowed in unadapted form only, for noncommercial purposes only, and only so long as attribution is given to the creator.

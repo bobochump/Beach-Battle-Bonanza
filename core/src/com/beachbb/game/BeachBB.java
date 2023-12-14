@@ -13,7 +13,7 @@ public class BeachBB extends Game {
 	public static final String TEX_SCREEN_LOADING = "base-loading-screen.png";
 	public static final String TEX_SCREEN_TITLE = "bbb-title-artwork.png";
 	public static final String TEX_SHEET_TITLE = "bbb-ui-connection.png";
-	public static final String TEX_SCREEN_GAME = "bbb-base-game-screen.png";
+	public static final String TEX_SCREEN_GAME = "bbb-final-game-screen.png";
 	public static final String TEX_SHEET_TILE = "bbb-base-tiles.png";
 	public static final String TEX_SHEET_CARD_BACK = "bbb-base-card-back.png";
 	public static final String TEX_SHEET_CARD_FRONT = "bbb-card-front2.png";

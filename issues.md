@@ -4,10 +4,11 @@
 - **[2]** Implement HP, Mana bars, and collision detection
 - **[3]** Add assets for cards
 - **[4]** Finish loading and title screen UI and assets
-
-### Open Issues
 - **[5]** Add sprite idle and other animations, visual effects
 - **[6]** Replace basic assets with polished assets
+
+### Open Issues
+
 
 ## Camillia
 ### Resolved Issues

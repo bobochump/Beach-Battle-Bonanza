@@ -75,7 +75,7 @@ public class Tile extends Actor {
             tileSprite = new TextureRegion(tileTexture, 0, 0, 117, 101);
         }
         else {
-            tileSprite = new TextureRegion(tileTexture, 118, 0, 117, 101);
+            tileSprite = new TextureRegion(tileTexture, 117, 0, 117, 101);
         }
     }
 
