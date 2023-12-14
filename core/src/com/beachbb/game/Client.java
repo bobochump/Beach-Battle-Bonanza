@@ -32,6 +32,7 @@ public class Client extends Thread implements NetworkEntity, AutoCloseable{
         output.println("02"+effectID);
     }
     public void sendOpponentHP(float p1hpPercent) { output.println("04"+p1hpPercent); }
+    public void sendOpponentBehavior(int behavior) { output.println("05"+behavior); }
     public void sendEndConnection() {output.println("99");}
     public void sendRematch() {output.println("98");}
 

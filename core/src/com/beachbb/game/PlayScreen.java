@@ -121,6 +121,10 @@ public class PlayScreen extends ScreenAdapter {
                     String parseHP = command.substring(2);
                     p2hpPercent = (Float.parseFloat(parseHP));
                 }
+                else if (commandType.equals("05")) { // Checks for behavior sprite change command
+                    String opponentBehavior = command.substring(2);
+                    player2.setBehavior(Integer.parseInt(opponentBehavior));
+                }
             }
 
             //update the current mana
@@ -214,6 +218,9 @@ public class PlayScreen extends ScreenAdapter {
                             if (effectID == -1) {
                                 //play sound to say that you cant use that card
                             } else {
+                                // update sprite animation
+                                player1.setBehavior(1);
+                                network.sendOpponentBehavior(1);
                                 //summon the effect and send it to the other player
                                 currentAttacks.add(attackConstructor.buildAttack(effectID, currentDelta, player1.getTileX(), player1.getTileY()));
                                 network.sendAttackCommand(effectID);
@@ -240,6 +247,8 @@ public class PlayScreen extends ScreenAdapter {
 
             // collision check for your player and danger tile; subtracts multiplier * 1 hp per tick
             if (grid.get(player1.getPlayerTileID()).getDanger()) {
+                player1.setBehavior(3);
+                network.sendOpponentBehavior(3);
                 player1.takeDamage(2.0f);
 
                 // update hp values, then ends game when one player's hp reaches 0
@@ -296,6 +305,11 @@ public class PlayScreen extends ScreenAdapter {
     public void render(float delta) {
         update(delta);
         ScreenUtils.clear(1,1,1,1);
+
+        // updates the animation frame to be used for drawing the player sprites
+        player1.updatePlayerSprite();
+        player2.updatePlayerSprite();
+
         bbbGame.batch.begin();
 
         bbbGame.batch.draw(bbbGame.am.get(bbbGame.TEX_SCREEN_GAME, Texture.class), 0, 0);
