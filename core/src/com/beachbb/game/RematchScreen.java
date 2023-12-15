@@ -3,6 +3,7 @@ package com.beachbb.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -15,76 +16,159 @@ public class RematchScreen extends ScreenAdapter {
     private Texture uiTitleTexture;
     private TextureRegion titleSprite;
     private TextureRegion waitingSprite;
-    private int state = 0;
     private String charMessage;
     private ConcurrentLinkedQueue<String> queue;
     private NetworkEntity network;
     private boolean muted ;
+    private Music musDefault;
+    private Music musSha;
+    private Music musArt;
+    private Music musBod;
+    private int charNum;
 
     public RematchScreen (BeachBB game, NetworkEntity connection, ConcurrentLinkedQueue<String> Q, boolean wasMuted) {
         bbbGame = game;
         network = connection;
         queue = Q;
         queue.clear();
-        state = 1;
         muted = wasMuted;
+        charNum = 0;
+
         // load sprites for UI elements
         uiTitleTexture = new Texture(Gdx.files.internal("bbb-ui-connection.png"));
         titleSprite = new TextureRegion(uiTitleTexture, 358, 0, 471, 281);
         waitingSprite = new TextureRegion(uiTitleTexture, 0, 109, 357, 58);
+
+        //load in the music
+        muted = wasMuted;
+        musDefault = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-title.ogg"));
+        musSha = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-title-shark.ogg"));
+        musArt = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-title-artificer.ogg"));
+        musBod = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-title-bodega.ogg"));
+        musDefault.setLooping(false);
+        musSha.setLooping(false);
+        musArt.setLooping(false);
+        musBod.setLooping(false);
+        musDefault.play();
+        musSha.play();
+        musArt.play();
+        musBod.play();
+        swapMusic();
+        //code to swap music to the looped version
+        musDefault.setOnCompletionListener(new Music.OnCompletionListener() {
+            @Override
+            public void onCompletion(Music music) {
+                System.out.println("Looped");
+                musDefault = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-title-loop.ogg"));
+                musSha = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-title-loop-shark.ogg"));
+                musArt = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-title-loop-artificer.ogg"));
+                musBod = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-title-loop-bodega.ogg"));
+                musDefault.setLooping(true);
+                musSha.setLooping(true);
+                musArt.setLooping(true);
+                musBod.setLooping(true);
+                musDefault.play();
+                musSha.play();
+                musArt.play();
+                musBod.play();
+                swapMusic();  //bit of a hack, but whatevs
+            }
+        });
     }
     public void show() {
         Gdx.app.log("TitleScreen", "show");
+    }
+
+    private void swapMusic(){
+        //mute everything
+        musDefault.setVolume(0);
+        musSha.setVolume(0);
+        musArt.setVolume(0);
+        musBod.setVolume(0);
+        if(!muted){
+            //only play correct track if we are not muted
+            switch (charNum){
+                case 1:
+                    musSha.setVolume(0.5f);
+                    break;
+                case 2:
+                    musArt.setVolume(0.5f);
+                    break;
+                case 3:
+                    musBod.setVolume(0.5f);
+                    break;
+                default:
+                    musDefault.setVolume(0.5f);
+                    break;
+            }
+        }
+    }
+
+    private void toggleMute(){
+        //mute everything
+        musDefault.setVolume(0);
+        musSha.setVolume(0);
+        musArt.setVolume(0);
+        musBod.setVolume(0);
+
+        //check if we were already muted
+        if(muted){
+            muted = false;
+            //switch case to unmute correct track
+            switch(charNum){
+                case 1:
+                    musSha.setVolume(0.5f);
+                    break;
+                case 2:
+                    musArt.setVolume(0.5f);
+                    break;
+                case 3:
+                    musBod.setVolume(0.5f);
+                    break;
+                default:
+                    musDefault.setVolume(0.5f);
+                    break;
+            }
+        } else {
+            muted = true;
+        }
+
     }
 
     public void update(float delta) {
         // set up a play screen with the player type equal to the number pressed
         // later, change to wait for other player's input before moving to PlayScreen
 
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_1)) {
-            if (state == 1) network.sendCharCommand(1);
-            // Wait until the queue is not empty before proceeding
-            while (queue.isEmpty()) {
-                // You can add a short delay here to avoid tight-looping and excessive CPU usage
-                try {
-                    Thread.sleep(100); // Adjust the sleep duration as needed
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            // Now, you can safely poll the queue
-            charMessage = queue.poll().substring(2);
-            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 1, Integer.parseInt(charMessage), network, queue, muted));
+        boolean charSwapFlag = false;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) || Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_1)) {
+            charNum = 1;
+            charSwapFlag = true;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2) || Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_2)) {
+            charNum = 2;
+            charSwapFlag = true;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3) || Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_3)) {
+            charNum = 3;
+            charSwapFlag = true;
+        }
+        //swap music and attempt to send char over network only when swapping characters
+        if(charSwapFlag){
+            swapMusic();
+            network.sendCharCommand(charNum);
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.M)){
+            toggleMute();
+        }
 
-        } else if (Gdx.input.isKeyPressed(Input.Keys.NUM_2) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
-            if (state == 1) network.sendCharCommand(2);
-            // Wait until the queue is not empty before proceeding
-            while (queue.isEmpty()) {
-                // You can add a short delay here to avoid tight-looping and excessive CPU usage
-                try {
-                    Thread.sleep(100); // Adjust the sleep duration as needed
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            // Now, you can safely poll the queue
-            charMessage = queue.poll().substring(2);
-            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 2, Integer.parseInt(charMessage), network, queue, muted));
-
-        } else if (Gdx.input.isKeyPressed(Input.Keys.NUM_3) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_3)) {
-            if (state == 1) network.sendCharCommand(3);
-            // Wait until the queue is not empty before proceeding
-            while (queue.isEmpty()) {
-                // You can add a short delay here to avoid tight-looping and excessive CPU usage
-                try {
-                    Thread.sleep(100); // Adjust the sleep duration as needed
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            // Now, you can safely poll the queue
-            charMessage = queue.poll().substring(2);
-            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 3, Integer.parseInt(charMessage), network, queue, muted));
+        //wait until queue is not empty, and player has chosen a character to proceed
+        if(!queue.isEmpty() && charNum != 0) {
+            do{
+                charMessage = queue.poll().substring(2);
+            } while(!queue.isEmpty());
+            musDefault.dispose();
+            musSha.dispose();
+            musArt.dispose();
+            musBod.dispose();
+            bbbGame.setScreen(new PlayScreen(bbbGame, charNum, Integer.parseInt(charMessage), network, queue, muted));
         }
 
         /*

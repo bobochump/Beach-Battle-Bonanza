@@ -33,6 +33,7 @@ public class TitleScreen extends ScreenAdapter {
         bbbGame = game;
         serverOverlayActive = false;
         clientOverlayActive = false;
+        charNum = 0;
 
         // load sprites for UI elements
         uiTitleTexture = new Texture(Gdx.files.internal("bbb-ui-connection.png"));
@@ -76,7 +77,7 @@ public class TitleScreen extends ScreenAdapter {
                 swapMusic();  //bit of a hack, but whatevs
             }
         });
-        charNum = 0;
+
     }
     public void show() {
         Gdx.app.log("TitleScreen", "show");
