@@ -147,7 +147,7 @@ public class Player extends Actor {
 
     public void setBehavior(int b) {
         behavior = b;
-        if (behavior == 1 || behavior == 3) {
+        if (behavior == 1 || behavior == 2 || behavior == 3) {
             updateCountdown = true;
         }
     }
