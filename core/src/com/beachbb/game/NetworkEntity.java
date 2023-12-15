@@ -10,4 +10,5 @@ interface NetworkEntity {
     void sendRematch();
     void start();
     void stopNetwork();
+    boolean isConnected();
 }

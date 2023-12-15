@@ -3,6 +3,7 @@ package com.beachbb.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -27,6 +28,20 @@ public class BeachBB extends Game {
 	public static final String TEX_OVERLAY_WIN2 = "bbb-base-win02.png";
 	public static final String TEX_OVERLAY_LOSE = "bbb-base-lose01.png";
 	public static final String TEX_OVERLAY_LOSE2 = "bbb-base-lose02.png";
+	public static final String MUS_TITLE = "bbb-music-title.ogg";
+	public static final String MUS_TITLE_SHA = "bbb-music-title-shark.ogg";
+	public static final String MUS_TITLE_ART = "bbb-music-title-artificer.ogg";
+	public static final String MUS_TITLE_BOD = "bbb-music-title-bodega.ogg";
+	public static final String MUS_TITLE_LOOP = "bbb-music-title-loop.ogg";
+	public static final String MUS_TITLE_LOOP_SHA = "bbb-music-title-loop-shark.ogg";
+	public static final String MUS_TITLE_LOOP_ART = "bbb-music-title-loop-artificer.ogg";
+	public static final String MUS_TITLE_LOOP_BOD = "bbb-music-title-loop-bodega.ogg";
+	public static final String MUS_BATTLE_SHA = "bbb-music-battle-shark.ogg";
+	public static final String MUS_BATTLE_ART = "bbb-music-battle-artificer.ogg";
+	public static final String MUS_BATTLE_BOD = "bbb-music-battle-bodega.ogg";
+	public static final String MUS_BATTLE_LOOP_SHA = "bbb-music-battle-loop-shark.ogg";
+	public static final String MUS_BATTLE_LOOP_ART = "bbb-music-battle-loop-artificer.ogg";
+	public static final String MUS_BATTLE_LOOP_BOD = "bbb-music-battle-loop-bodega.ogg";
 	
 	@Override
 	public void create () {
@@ -49,6 +64,20 @@ public class BeachBB extends Game {
 		am.load(TEX_OVERLAY_WIN2, Texture.class);
 		am.load(TEX_OVERLAY_LOSE, Texture.class);
 		am.load(TEX_OVERLAY_LOSE2, Texture.class);
+		am.load(MUS_TITLE, Music.class);
+		am.load(MUS_TITLE_SHA, Music.class);
+		am.load(MUS_TITLE_ART, Music.class);
+		am.load(MUS_TITLE_BOD, Music.class);
+		am.load(MUS_TITLE_LOOP, Music.class);
+		am.load(MUS_TITLE_LOOP_SHA, Music.class);
+		am.load(MUS_TITLE_LOOP_ART, Music.class);
+		am.load(MUS_TITLE_LOOP_BOD, Music.class);
+		am.load(MUS_BATTLE_SHA, Music.class);
+		am.load(MUS_BATTLE_ART, Music.class);
+		am.load(MUS_BATTLE_BOD, Music.class);
+		am.load(MUS_BATTLE_LOOP_SHA, Music.class);
+		am.load(MUS_BATTLE_LOOP_ART, Music.class);
+		am.load(MUS_BATTLE_LOOP_BOD, Music.class);
 
 
 		batch = new SpriteBatch();

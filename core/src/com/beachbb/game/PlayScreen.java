@@ -3,6 +3,7 @@ package com.beachbb.game;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -41,8 +42,11 @@ public class PlayScreen extends ScreenAdapter {
     private TextureRegion deckBar;
     private boolean oppRematch;
     private boolean playerRematch;
+    private Music mus;
+    private boolean muted;
+    private float volumeMultiplier;
 
-    public PlayScreen(BeachBB game, int p1, int p2, NetworkEntity playerNetwork, ConcurrentLinkedQueue<String> playerQueue) {
+    public PlayScreen(BeachBB game, int p1, int p2, NetworkEntity playerNetwork, ConcurrentLinkedQueue<String> playerQueue, boolean wasMuted) {
         bbbGame = game;
         player1 = new Player(p1, 1);
         player2 = new Player(p2, 2);
@@ -81,11 +85,65 @@ public class PlayScreen extends ScreenAdapter {
         hpBarP2 = new TextureRegion(uiTexture, 60, 0, 616, 24);
         manaBar = new TextureRegion(uiTexture, 0, 0, 53, 152);
         deckBar = new TextureRegion(uiTexture, 63, 70, 69, 82);
+
+        //load in the music
+        switch (p2){
+            case 1:
+                mus = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-battle-shark.ogg"));
+                break;
+            case 2:
+                mus = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-battle-artificer.ogg"));
+                break;
+            case 3:
+                mus = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-battle-bodega.ogg"));
+                break;
+        }
+        mus.setLooping(false);
+        muted = wasMuted;
+        volumeMultiplier = 0.5F;
+        if(muted){
+            mus.setVolume(0);
+        } else {
+            mus.setVolume(volumeMultiplier);
+        }
+        mus.play();
+        mus.setOnCompletionListener(new Music.OnCompletionListener() {
+                @Override
+                public void onCompletion(Music music) {
+                    switch (player2.getPlayerNum()){
+                        case 1:
+                            mus = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-battle-loop-shark.ogg"));
+                            break;
+                        case 2:
+                            mus = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-battle-loop-artificer.ogg"));
+                            break;
+                        case 3:
+                            mus = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-battle-loop-bodega.ogg"));
+                            break;
+                    }
+                    mus.setLooping(true);
+                    if(muted){
+                        mus.setVolume(0);
+                    } else {
+                        mus.setVolume(volumeMultiplier);
+                    }
+                    mus.play();
+                }
+            }
+        );
     }
 
     public void show() {
         Gdx.app.log("PlayScreen", "show");
         state = SubState.PREP;
+    }
+
+    private void toggleMute(){
+        if(mus.getVolume() == 0){
+            mus.setVolume(volumeMultiplier);
+        } else {
+            mus.setVolume(0);
+        }
     }
 
     public void update(float delta) {
@@ -227,6 +285,10 @@ public class PlayScreen extends ScreenAdapter {
                                 //subtract mana cost
                                 currentMana -= playersDeck.getUsedCardMana();
                             }
+                            break;
+                        case Input.Keys.M:
+                            toggleMute();
+                            break;
                     }
                     return true;
                 }
@@ -257,6 +319,9 @@ public class PlayScreen extends ScreenAdapter {
             }
 
             if (p1hpPercent <= 0 || p2hpPercent <= 0) {
+                volumeMultiplier = 0.25F;
+                toggleMute();
+                toggleMute();
                 state = SubState.END;
             }
         }
@@ -270,12 +335,14 @@ public class PlayScreen extends ScreenAdapter {
                     oppRematch = true;
                 }
                 if (commandType.equals("99")){ // Checks for exit command
-                    bbbGame.setScreen(new TitleScreen(bbbGame)); // Sets to titlescreen is opponent disconnected
+                    mus.dispose();
+                    bbbGame.setScreen(new TitleScreen(bbbGame, muted)); // Sets to titlescreen is opponent disconnected
                 }
             }
             if(playerRematch && oppRematch){ // Checks if both players accepted rematch.
                 System.out.println("Rematch accepted.");
-                bbbGame.setScreen(new RematchScreen(bbbGame, network, queue));
+                mus.dispose();
+                bbbGame.setScreen(new RematchScreen(bbbGame, network, queue, muted));
             }
             Gdx.input.setInputProcessor(new InputAdapter() {
                 public boolean keyDown(int keycode) {
@@ -285,7 +352,8 @@ public class PlayScreen extends ScreenAdapter {
                                 System.out.println("Ending connection.");
                                 network.sendEndConnection(); // Sends a message to tell the other player to end connection
                                 network.stopNetwork(); // Stops the network entity
-                                bbbGame.setScreen(new TitleScreen(bbbGame)); // Sets game back to title screen
+                                mus.dispose();
+                                bbbGame.setScreen(new TitleScreen(bbbGame, muted)); // Sets game back to title screen
                                 break;
                             }
                         case Input.Keys.SPACE: // Checks if the player hit space and prepares for rematch

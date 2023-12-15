@@ -9,6 +9,7 @@ public class Client extends Thread implements NetworkEntity, AutoCloseable{
     private PrintWriter output;
     private BufferedReader input;
     private boolean ended;
+    private boolean connected;
     private String address;
     private int portNum;
 
@@ -18,6 +19,7 @@ public class Client extends Thread implements NetworkEntity, AutoCloseable{
         queue = clientQueue;
         address = servAddress;
         portNum = portNumber;
+        connected = false;
     }
 
     public void sendMoveCommand(int direction){
@@ -43,6 +45,7 @@ public class Client extends Thread implements NetworkEntity, AutoCloseable{
         try{
             socket = new Socket(address, portNum);
             System.out.println("Connection successful.");
+            connected = true;
 
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream(), true);
@@ -80,11 +83,14 @@ public class Client extends Thread implements NetworkEntity, AutoCloseable{
     // Function that ends connection
     public void stopNetwork(){
         if(!ended) {
-            output.println("99");
+            if(connected){
+                output.println("99");
+            }
             ended = true;
             interrupt();
             close();
             System.out.println("Connection ended");
+            connected = false;
         }
     }
 
@@ -98,6 +104,10 @@ public class Client extends Thread implements NetworkEntity, AutoCloseable{
             // Handle the exception or log it
             e.printStackTrace();
         }
+    }
+
+    public boolean isConnected(){
+        return connected;
     }
 
 }
