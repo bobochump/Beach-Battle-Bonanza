@@ -27,7 +27,7 @@ public class TriAttack implements AttackEntity {
         centerBullet = new BasicAttack(delta, playerX, playerY);
         centerActive = true;
         rightActive = false;
-        if(playerX < 5) {
+        if(playerX < 4) {
             rightBullet = new BasicAttack(delta, playerX + 1, playerY);
             rightActive = true;
         }

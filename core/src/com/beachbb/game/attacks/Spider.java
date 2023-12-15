@@ -79,7 +79,7 @@ public class Spider implements AttackEntity {
             flag = 1;
             if(enemyAttack) { y = 0; }
             else { y = 110 * 5; }
-            grid.get(tileY * 5 + tileX).setBlocked(true);
+            //grid.get(tileY * 5 + tileX).setBlocked(true);
         }
         if(flag == 1 && (x < 0 || x > 126 * 4)) {
             flag = 2;
@@ -113,7 +113,7 @@ public class Spider implements AttackEntity {
             if(enemyAttack){
                 grid.get(0 * 5 + 0).setBlocked(false);
                 grid.get(2 * 5 + 0).setBlocked(false);
-                grid.get(0 * 5 + sourceX).setBlocked(false);
+                //grid.get(0 * 5 + sourceX).setBlocked(false);
                 grid.get(2 * 5 + 4).setBlocked(false);
                 grid.get(0 * 5 + 4).setBlocked(false);
                 grid.get(0 * 5 + 0).setDanger(false);

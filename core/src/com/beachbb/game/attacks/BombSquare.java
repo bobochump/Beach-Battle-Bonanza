@@ -99,7 +99,7 @@ public class BombSquare implements AttackEntity {
                     grid.get((destTileY - 1) * 5 + tileX - 1).setDanger(true);
                 }
             }
-            if(flag == 2 && timeSinceDetonation > 1.5) {
+            if(flag == 2 && timeSinceDetonation > 2.5) {
                 grid.get(destTileY * 5 + tileX).setDanger(false);
                 if(tileX < 4) {
                     grid.get(destTileY * 5 + tileX + 1).setDanger(false);

@@ -324,7 +324,7 @@ public class PlayScreen extends ScreenAdapter {
                     //heal the player
                     player1.setBehavior(2);
                     network.sendOpponentBehavior(2);
-                    player1.takeDamage(-50f);
+                    player1.takeDamage(-20f);
                     p1hpPercent = player1.getPercentageHP();
                     if(p1hpPercent > 1){
                         p1hpPercent = 1;
