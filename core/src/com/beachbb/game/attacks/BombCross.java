@@ -49,7 +49,7 @@ public class BombCross implements AttackEntity {
         bullet = new Texture(Gdx.files.internal("bbb-bullet.png"));
     }
     public int updateAttack(float delta, ArrayList<Tile> grid){
-        float speed = 192;
+        float speed = 128;
         if (stillTraveling){
             if(enemyAttack){
                 y -= speed * delta;
