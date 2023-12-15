@@ -41,7 +41,7 @@ public class Deck {
                 break;
             case 2: //Artificer
                 discard.add(new Card("Basic Attack", 1, 6, 5));
-                discard.add(new Card("Basic Attack", 1, 7, 6));
+                discard.add(new Card("Web Bomb", 4, 7, 6));
                 discard.add(new Card("Basic Attack", 1, 8, 9));
                 discard.add(new Card("Basic Attack", 1, 9, 8));
                 discard.add(new Card("Tactical Laser", 15, 10, 7));
