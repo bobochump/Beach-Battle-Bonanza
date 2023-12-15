@@ -7,14 +7,20 @@ public class AttackConstructor {
         switch (effectID) {
             case 2:
                 return new BombSquare(delta, playerX, playerY);
+            case 3:
+                return new TriAttack(delta, playerX, playerY);
             case 5:
                 return new Laser3Wide(delta, playerX, playerY);
             case 7:
                 return new BombCross(delta, playerX, playerY);
+            case 8:
+                return new Spider(delta, playerX, playerY);
             case 10:
                 return new Laser2Beams(delta, playerX, playerY);
             case 12:
                 return new BombPlus(delta, playerX, playerY);
+            case 13:
+                return new Boomerang(delta, playerX, playerY);
             case 15:
                 return new Laser1Wide(delta, playerX, playerY);
             default:

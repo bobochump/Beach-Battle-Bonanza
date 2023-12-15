@@ -32,8 +32,8 @@ public class Deck {
         switch (characterNum) {
             case 3: //Bodega Worker
                 discard.add(new Card("Basic Attack", 1, 11, 10));
-                discard.add(new Card("Lingering Bomb", 4, 12, 13));
-                discard.add(new Card("Basic Attack", 1, 13, 12));
+                discard.add(new Card("Lingering Bomb", 5, 12, 13));
+                discard.add(new Card("Boomerang", 3, 13, 12));
                 discard.add(new Card("Basic Attack", 1, 14, 14));
                 discard.add(new Card("Lingering Laser", 15, 15, 11));
                 discard.add(new Card("Basic Attack", 1, 1, 10));
@@ -41,17 +41,17 @@ public class Deck {
                 break;
             case 2: //Artificer
                 discard.add(new Card("Basic Attack", 1, 6, 5));
-                discard.add(new Card("Web Bomb", 4, 7, 6));
-                discard.add(new Card("Basic Attack", 1, 8, 9));
-                discard.add(new Card("Basic Attack", 1, 9, 8));
+                discard.add(new Card("Web Bomb", 5, 7, 6));
+                discard.add(new Card("Spider", 3, 8, 8));
+                discard.add(new Card("Basic Attack", 1, 9, 9));
                 discard.add(new Card("Tactical Laser", 15, 10, 7));
                 discard.add(new Card("Basic Attack", 1, 11, 5));
                 maxCards = 6;
                 break;
             default: //default is character 1, the Shark
                 discard.add(new Card("Basic Attack", 1, 1, 0));
-                discard.add(new Card("Big Bomb", 4, 2, 3));
-                discard.add(new Card("Basic Attack", 1, 3, 2));
+                discard.add(new Card("Big Bomb", 5, 2, 3));
+                discard.add(new Card("Tri Attack", 3, 3, 2));
                 discard.add(new Card("Basic Attack", 1, 4, 4));
                 discard.add(new Card("MEGA DEATH LASER", 15, 5, 1));
                 discard.add(new Card("Basic Attack", 1, 6, 0));
