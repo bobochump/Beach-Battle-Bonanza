@@ -8,7 +8,7 @@ import com.beachbb.game.Tile;
 
 import java.util.ArrayList;
 
-public class Laser3Wide implements AttackEntity {
+public class Laser2Beams implements AttackEntity {
     private int sourceX;  //used for where on the grid the attack comes from
     private int sourceY;
     private float x; //screen co-ords for where to draw the attack
@@ -19,7 +19,7 @@ public class Laser3Wide implements AttackEntity {
     private int flag; //used for moving between different stages of the attack
     private float timeElapsed;  //used to keep track of how long the attack has gone for
 
-    public Laser3Wide(float delta, int playerX, int playerY){
+    public Laser2Beams(float delta, int playerX, int playerY){
         sourceX = playerX;
         sourceY = playerY;
         enemyAttack = sourceY > 2;
@@ -37,23 +37,9 @@ public class Laser3Wide implements AttackEntity {
     public int updateAttack(float delta, ArrayList<Tile> grid){
         timeElapsed += delta;
 
-        //Give a bit of startup lag, and start with only center column
-        if(flag == 0 && timeElapsed > 0.3) {
+        //Give a bit of startup lag, and have 2 beams on either side
+        if(flag == 0 && timeElapsed > 0.2) {
             flag = 1;
-            if(enemyAttack){
-                for (int i = sourceY; i >= 0; i--){
-                    grid.get(i * 5 + sourceX).setDanger(true);
-                }
-            } else {
-                for (int i = sourceY; i < 6; i++){
-                    grid.get(i * 5 + sourceX).setDanger(true);
-                }
-            }
-        }
-
-        //After a bit, change to 3 wide
-        if(flag == 1 && timeElapsed > 0.5) {
-            flag = 2;
             if(enemyAttack){
                 for (int i = sourceY; i >= 0; i--){
                     if(sourceX != 0){
@@ -76,14 +62,13 @@ public class Laser3Wide implements AttackEntity {
         }
 
         //After a bit longer, attack ends
-        if(flag == 2 && timeElapsed > 3.0) {
-            flag = 3;
+        if(flag == 1 && timeElapsed > 4.0) {
+            flag = 2;
             if(enemyAttack){
                 for (int i = sourceY; i >= 0; i--){
                     if(sourceX != 0){
                         grid.get(i * 5 + sourceX - 1).setDanger(false);
                     }
-                    grid.get(i * 5 + sourceX).setDanger(false);
                     if(sourceX != 4) {
                         grid.get(i * 5 + sourceX + 1).setDanger(false);
                     }
@@ -93,7 +78,6 @@ public class Laser3Wide implements AttackEntity {
                     if(sourceX != 0){
                         grid.get(i * 5 + sourceX - 1).setDanger(false);
                     }
-                    grid.get(i * 5 + sourceX).setDanger(false);
                     if(sourceX != 4) {
                         grid.get(i * 5 + sourceX + 1).setDanger(false);
                     }
