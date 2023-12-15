@@ -49,11 +49,12 @@ public class RematchScreen extends ScreenAdapter {
         musSha.setLooping(false);
         musArt.setLooping(false);
         musBod.setLooping(false);
+        swapMusic();
         musDefault.play();
         musSha.play();
         musArt.play();
         musBod.play();
-        swapMusic();
+
         //code to swap music to the looped version
         musDefault.setOnCompletionListener(new Music.OnCompletionListener() {
             @Override
@@ -67,11 +68,11 @@ public class RematchScreen extends ScreenAdapter {
                 musSha.setLooping(true);
                 musArt.setLooping(true);
                 musBod.setLooping(true);
+                swapMusic();  //bit of a hack, but whatevs
                 musDefault.play();
                 musSha.play();
                 musArt.play();
                 musBod.play();
-                swapMusic();  //bit of a hack, but whatevs
             }
         });
     }

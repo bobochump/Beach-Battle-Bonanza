@@ -99,7 +99,6 @@ public class PlayScreen extends ScreenAdapter {
                 break;
         }
         mus.setLooping(false);
-        mus.play();
         muted = wasMuted;
         volumeMultiplier = 0.5F;
         if(muted){
@@ -107,6 +106,7 @@ public class PlayScreen extends ScreenAdapter {
         } else {
             mus.setVolume(volumeMultiplier);
         }
+        mus.play();
         mus.setOnCompletionListener(new Music.OnCompletionListener() {
                 @Override
                 public void onCompletion(Music music) {
@@ -122,12 +122,12 @@ public class PlayScreen extends ScreenAdapter {
                             break;
                     }
                     mus.setLooping(true);
-                    mus.play();
                     if(muted){
                         mus.setVolume(0);
                     } else {
                         mus.setVolume(volumeMultiplier);
                     }
+                    mus.play();
                 }
             }
         );
