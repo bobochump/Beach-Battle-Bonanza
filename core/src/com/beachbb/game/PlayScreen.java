@@ -46,6 +46,10 @@ public class PlayScreen extends ScreenAdapter {
     private boolean muted;
     private float volumeMultiplier;
     private float damageTimer;
+    private float damageMult;
+    private boolean blinkFrame;
+    private float enemyStatusTimer;
+    private int numCloaks;
 
     public PlayScreen(BeachBB game, int p1, int p2, NetworkEntity playerNetwork, ConcurrentLinkedQueue<String> playerQueue, boolean wasMuted) {
         bbbGame = game;
@@ -62,6 +66,10 @@ public class PlayScreen extends ScreenAdapter {
         p2hpPercent = 1;
         oppRematch = false;
         playerRematch = false;
+        damageMult = 2F;
+        blinkFrame = false;
+        enemyStatusTimer = 0;
+        numCloaks = 0;
 
         // make a grid and add tiles to it
         grid = new ArrayList<>(30);
@@ -148,6 +156,8 @@ public class PlayScreen extends ScreenAdapter {
     }
 
     public void update(float delta) {
+        blinkFrame = !blinkFrame;
+        enemyStatusTimer -= delta;
         if (state == SubState.PREP) {
             // to-do: make sure both players are synced and initiates countdown
             // move onto play state once countdown finishes
@@ -172,7 +182,7 @@ public class PlayScreen extends ScreenAdapter {
                 // Checks for command types
                 if (commandType.equals("01")) { // Checks for movement command
                     String movement = command.substring(2);
-                    player2.movePlayer(Integer.parseInt(movement));
+                    player2.movePlayer(Integer.parseInt(movement), grid);
                 } else if (commandType.equals("02")) { // Checks for attack command
                     currentAttacks.add(attackConstructor.buildAttack(Integer.parseInt(command.substring(2)), currentDelta, player2.getTileX(), player2.getTileY()));
                 }
@@ -182,7 +192,14 @@ public class PlayScreen extends ScreenAdapter {
                 }
                 else if (commandType.equals("05")) { // Checks for behavior sprite change command
                     String opponentBehavior = command.substring(2);
-                    player2.setBehavior(Integer.parseInt(opponentBehavior));
+                    int oppBeh = Integer.parseInt(opponentBehavior);
+                    player2.setBehavior(oppBeh);
+                    if(player2.getPlayerNum() == 1 && oppBeh == 2) {
+                        enemyStatusTimer = 5.0F;
+                    }
+                    if(player2.getPlayerNum() == 2 && oppBeh == 2) {
+                        enemyStatusTimer = 2.5F;
+                    }
                 }
             }
 
@@ -228,19 +245,19 @@ public class PlayScreen extends ScreenAdapter {
                     switch (keycode) {
                         case Input.Keys.W:
                             network.sendMoveCommand(3);
-                            player1.movePlayer(1);
+                            player1.movePlayer(1, grid);
                             break;
                         case Input.Keys.D:
                             network.sendMoveCommand(4);
-                            player1.movePlayer(2);
+                            player1.movePlayer(2, grid);
                             break;
                         case Input.Keys.S:
                             network.sendMoveCommand(1);
-                            player1.movePlayer(3);
+                            player1.movePlayer(3, grid);
                             break;
                         case Input.Keys.A:
                             network.sendMoveCommand(2);
-                            player1.movePlayer(4);
+                            player1.movePlayer(4, grid);
                             break;
                         case Input.Keys.UP:
                             //player2.movePlayer(1);
@@ -303,6 +320,42 @@ public class PlayScreen extends ScreenAdapter {
                 if (returnVal == 1) {
                     attacksToKeep.remove(a);
                 }
+                if(returnVal == 2) {
+                    //heal the player
+                    player1.setBehavior(2);
+                    network.sendOpponentBehavior(2);
+                    player1.takeDamage(-20f);
+                    p1hpPercent = player1.getPercentageHP();
+                    if(p1hpPercent > 1){
+                        p1hpPercent = 1;
+                        player1.resetHP();
+                    }
+                    network.sendOpponentHP(p1hpPercent);
+                }
+                if(returnVal == 3) {
+                    //buff the player's defense
+                    player1.setBehavior(2);
+                    network.sendOpponentBehavior(2);
+                    damageMult *= 0.5F;
+                }
+                if(returnVal == 4) {
+                    //unbuff the player's defense
+                    damageMult *= 2.0F;
+                }
+                if(returnVal == 5) {
+                    //buff the player's defense
+                    player1.setBehavior(2);
+                    network.sendOpponentBehavior(2);
+                    damageMult = 0;
+                    numCloaks++;
+                }
+                if(returnVal == 6) {
+                    //unbuff the player's defense
+                    numCloaks--;
+                    if(numCloaks == 0){
+                        damageMult = 2.0F;
+                    }
+                }
             }
             currentAttacks.clear();
             currentAttacks.addAll(attacksToKeep);
@@ -313,7 +366,7 @@ public class PlayScreen extends ScreenAdapter {
             if (grid.get(player1.getPlayerTileID()).getDanger() && damageTimer>=.03) {
                 player1.setBehavior(3);
                 network.sendOpponentBehavior(3);
-                player1.takeDamage(2.0f);
+                player1.takeDamage(damageMult);
                 damageTimer = 0;
 
                 // update hp values, then ends game when one player's hp reaches 0
@@ -399,13 +452,17 @@ public class PlayScreen extends ScreenAdapter {
             t.drawTile(bbbGame.batch);
         }
 
-        player2.drawPlayer(bbbGame.batch);
+        if(enemyStatusTimer <= 0 || !blinkFrame) {
+            player2.drawPlayer(bbbGame.batch);
+        }
 
         for (AttackEntity a : currentAttacks) {
             a.drawAttack(bbbGame.batch);
         }
 
-        player1.drawPlayer(bbbGame.batch);
+        if(damageMult == 2.0 || !blinkFrame) {
+            player1.drawPlayer(bbbGame.batch);
+        }
 
         if (state == SubState.END) {
             if (p1hpPercent <= 0) {

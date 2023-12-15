@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import java.util.ArrayList;
+
 public class Player extends Actor {
     private static final int FRAME_COLS = 3, FRAME_ROWS = 8;
     private int playerType;
@@ -115,27 +117,28 @@ public class Player extends Actor {
      * as long as the direction points to a valid grid location. Otherwise, does nothing.
      * @param direction: 1 = north, 2 = east, 3 = south, 4 = west
      */
-    public void movePlayer(int direction) {
+    public void movePlayer(int direction, ArrayList<Tile> grid) {
+        if(grid.get(y * 5 + x).getBlocked()) {return;}
         switch (direction) {
             case 1: // north
                 if (playerSide == 1) {
-                    if (y < 2) { y++; }
+                    if (y < 2 && !grid.get((y + 1) * 5 + x).getBlocked()) { y++; }
                 } else {
-                    if (y < 5) { y++; }
+                    if (y < 5 && !grid.get((y + 1) * 5 + x).getBlocked()) { y++; }
                 }
                 break;
             case 2: // east
-                if (x < 4) { x++; }
+                if (x < 4 && !grid.get(y * 5 + x + 1).getBlocked()) { x++; }
                 break;
             case 3: // south
                 if (playerSide == 1) {
-                    if (y > 0) { y--; }
+                    if (y > 0 && !grid.get((y - 1) * 5 + x).getBlocked()) { y--; }
                 } else {
-                    if (y > 3) { y--; }
+                    if (y > 3 && !grid.get((y - 1) * 5 + x).getBlocked()) { y--; }
                 }
                 break;
             case 4: // west
-                if (x > 0) { x--; }
+                if (x > 0 && !grid.get(y * 5 + x - 1).getBlocked()) { x--; }
                 break;
             default: // no movement
                 break;
@@ -144,7 +147,7 @@ public class Player extends Actor {
 
     public void setBehavior(int b) {
         behavior = b;
-        if (behavior == 1 || behavior == 3) {
+        if (behavior == 1 || behavior == 2 || behavior == 3) {
             updateCountdown = true;
         }
     }
@@ -196,6 +199,11 @@ public class Player extends Actor {
                 break;
             case 2:
                 playerSprite = animationBuff.getKeyFrame(animationTimer, true);
+                if (countdownTimer >= 0.6f) {
+                    updateCountdown = false;
+                    countdownTimer = 0f;
+                    behavior = 0;
+                }
                 break;
             case 3:
                 playerSprite = animationHit.getKeyFrame(animationTimer, true);

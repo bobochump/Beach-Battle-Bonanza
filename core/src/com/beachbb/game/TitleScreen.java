@@ -20,7 +20,8 @@ public class TitleScreen extends ScreenAdapter {
     private String charMessage;
     private ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<String>();
     private NetworkEntity network;
-    private String address = "127.0.0.1";
+//    private String address = "127.0.0.1";
+    private String address = "192.168.11.108";
     private Music musDefault;
     private Music musSha;
     private Music musArt;
@@ -146,13 +147,13 @@ public class TitleScreen extends ScreenAdapter {
         if(state == 0) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
                 state = 1;
-                network = new Server(address, 1234, queue);
+                network = new Server(address, 4, queue);
                 network.start();
                 serverOverlayActive = true;
             }
             else if(Gdx.input.isKeyJustPressed(Input.Keys.C)){
                 state = 1;
-                network = new Client(address, 1234, queue);
+                network = new Client(address, 4, queue);
                 network.start();
                 clientOverlayActive = true;
                 //TODO: Figure out how to retry client connections if the server refuses/does not exist yet

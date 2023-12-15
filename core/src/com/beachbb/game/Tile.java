@@ -82,6 +82,9 @@ public class Tile extends Actor {
     public boolean getDanger() {
         return isDanger;
     }
+    public boolean getBlocked() {
+        return isBlocked;
+    }
 
     public void drawTile(SpriteBatch batch) {
         batch.draw(tileSprite, tileCoordX, tileCoordY);
