@@ -172,7 +172,7 @@ public class PlayScreen extends ScreenAdapter {
                 // Checks for command types
                 if (commandType.equals("01")) { // Checks for movement command
                     String movement = command.substring(2);
-                    player2.movePlayer(Integer.parseInt(movement));
+                    player2.movePlayer(Integer.parseInt(movement), grid);
                 } else if (commandType.equals("02")) { // Checks for attack command
                     currentAttacks.add(attackConstructor.buildAttack(Integer.parseInt(command.substring(2)), currentDelta, player2.getTileX(), player2.getTileY()));
                 }
@@ -228,19 +228,19 @@ public class PlayScreen extends ScreenAdapter {
                     switch (keycode) {
                         case Input.Keys.W:
                             network.sendMoveCommand(3);
-                            player1.movePlayer(1);
+                            player1.movePlayer(1, grid);
                             break;
                         case Input.Keys.D:
                             network.sendMoveCommand(4);
-                            player1.movePlayer(2);
+                            player1.movePlayer(2, grid);
                             break;
                         case Input.Keys.S:
                             network.sendMoveCommand(1);
-                            player1.movePlayer(3);
+                            player1.movePlayer(3, grid);
                             break;
                         case Input.Keys.A:
                             network.sendMoveCommand(2);
-                            player1.movePlayer(4);
+                            player1.movePlayer(4, grid);
                             break;
                         case Input.Keys.UP:
                             //player2.movePlayer(1);
