@@ -29,6 +29,7 @@
 
 ## Additional features added
 - Three different characters with own unique sprite, backsprite, and attack/hit/idle animations
+- Original music tracks composed for the game, with variations to match each character
 - Variety of different attacks for each character
 - Invincibility frames implementation
 
