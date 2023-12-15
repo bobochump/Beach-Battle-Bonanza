@@ -50,7 +50,7 @@ public class Deck {
                 break;
             default: //default is character 1, the Shark
                 discard.add(new Card("Basic Attack", 1, 1, 0));
-                discard.add(new Card("Basic Attack", 1, 2, 3));
+                discard.add(new Card("Big Bomb", 4, 2, 3));
                 discard.add(new Card("Basic Attack", 1, 3, 2));
                 discard.add(new Card("Basic Attack", 1, 4, 4));
                 discard.add(new Card("MEGA DEATH LASER", 15, 5, 1));

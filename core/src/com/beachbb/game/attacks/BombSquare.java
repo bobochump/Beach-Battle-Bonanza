@@ -8,7 +8,7 @@ import com.beachbb.game.Tile;
 
 import java.util.ArrayList;
 
-public class BombPlus implements AttackEntity {
+public class BombSquare implements AttackEntity {
     private int sourceX; //used to keep track of where the attack originated from
     private int sourceY;
     private float x; //center of where to draw attack
@@ -23,7 +23,7 @@ public class BombPlus implements AttackEntity {
     private boolean enemyAttack; //true if coming from enemy, false if coming from player
     private Texture bullet;  //texture
 
-    public BombPlus(float delta, int playerX, int playerY){
+    public BombSquare(float delta, int playerX, int playerY){
         sourceX = playerX;
         sourceY = playerY;
         enemyAttack = sourceY > 2;
@@ -49,7 +49,7 @@ public class BombPlus implements AttackEntity {
         bullet = new Texture(Gdx.files.internal("bbb-bullet.png"));
     }
     public int updateAttack(float delta, ArrayList<Tile> grid){
-        float speed = 392;
+        float speed = 128;
         if (stillTraveling){
             if(enemyAttack){
                 y -= speed * delta;
@@ -67,12 +67,12 @@ public class BombPlus implements AttackEntity {
         } else {
             timeSinceDetonation += delta;
             //start in middle
-            if(flag == 0 && timeSinceDetonation > 0.1) {
+            if(flag == 0 && timeSinceDetonation > 0.15) {
                 flag = 1;
                 grid.get(destTileY * 5 + tileX).setDanger(true);
             }
             //do the plus next
-            if(flag == 1 && timeSinceDetonation > 0.2) {
+            if(flag == 1 && timeSinceDetonation > 0.3) {
                 flag = 2;
                 if(tileX < 4) {
                     grid.get(destTileY * 5 + tileX + 1).setDanger(true);
@@ -86,8 +86,20 @@ public class BombPlus implements AttackEntity {
                 if(destTileY > 0) {
                     grid.get((destTileY - 1) * 5 + tileX).setDanger(true);
                 }
+                if(tileX < 4 && destTileY < 5) {
+                    grid.get((destTileY + 1) * 5 + tileX + 1).setDanger(true);
+                }
+                if(tileX < 4 && destTileY > 0) {
+                    grid.get((destTileY - 1) * 5 + tileX + 1).setDanger(true);
+                }
+                if(tileX > 0 && destTileY < 5) {
+                    grid.get((destTileY + 1) * 5 + tileX - 1).setDanger(true);
+                }
+                if(tileX > 0 && destTileY > 0) {
+                    grid.get((destTileY - 1) * 5 + tileX - 1).setDanger(true);
+                }
             }
-            if(flag == 2 && timeSinceDetonation > 2.5) {
+            if(flag == 2 && timeSinceDetonation > 1.5) {
                 grid.get(destTileY * 5 + tileX).setDanger(false);
                 if(tileX < 4) {
                     grid.get(destTileY * 5 + tileX + 1).setDanger(false);
@@ -100,6 +112,18 @@ public class BombPlus implements AttackEntity {
                 }
                 if(destTileY > 0) {
                     grid.get((destTileY - 1) * 5 + tileX).setDanger(false);
+                }
+                if(tileX < 4 && destTileY < 5) {
+                    grid.get((destTileY + 1) * 5 + tileX + 1).setDanger(false);
+                }
+                if(tileX < 4 && destTileY > 0) {
+                    grid.get((destTileY - 1) * 5 + tileX + 1).setDanger(false);
+                }
+                if(tileX > 0 && destTileY < 5) {
+                    grid.get((destTileY + 1) * 5 + tileX - 1).setDanger(false);
+                }
+                if(tileX > 0 && destTileY > 0) {
+                    grid.get((destTileY - 1) * 5 + tileX - 1).setDanger(false);
                 }
                 return 1;
             }

@@ -5,6 +5,8 @@ import com.beachbb.game.attacks.*;
 public class AttackConstructor {
     AttackEntity buildAttack(int effectID, float delta, int playerX, int playerY) {
         switch (effectID) {
+            case 2:
+                return new BombSquare(delta, playerX, playerY);
             case 5:
                 return new Laser3Wide(delta, playerX, playerY);
             case 10:
