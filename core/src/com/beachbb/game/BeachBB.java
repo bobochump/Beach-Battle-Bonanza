@@ -36,6 +36,12 @@ public class BeachBB extends Game {
 	public static final String MUS_TITLE_LOOP_SHA = "bbb-music-title-loop-shark.ogg";
 	public static final String MUS_TITLE_LOOP_ART = "bbb-music-title-loop-artificer.ogg";
 	public static final String MUS_TITLE_LOOP_BOD = "bbb-music-title-loop-bodega.ogg";
+	public static final String MUS_BATTLE_SHA = "bbb-music-battle-shark.ogg";
+	public static final String MUS_BATTLE_ART = "bbb-music-battle-artificer.ogg";
+	public static final String MUS_BATTLE_BOD = "bbb-music-battle-bodega.ogg";
+	public static final String MUS_BATTLE_LOOP_SHA = "bbb-music-battle-loop-shark.ogg";
+	public static final String MUS_BATTLE_LOOP_ART = "bbb-music-battle-loop-artificer.ogg";
+	public static final String MUS_BATTLE_LOOP_BOD = "bbb-music-battle-loop-bodega.ogg";
 	
 	@Override
 	public void create () {
@@ -66,6 +72,12 @@ public class BeachBB extends Game {
 		am.load(MUS_TITLE_LOOP_SHA, Music.class);
 		am.load(MUS_TITLE_LOOP_ART, Music.class);
 		am.load(MUS_TITLE_LOOP_BOD, Music.class);
+		am.load(MUS_BATTLE_SHA, Music.class);
+		am.load(MUS_BATTLE_ART, Music.class);
+		am.load(MUS_BATTLE_BOD, Music.class);
+		am.load(MUS_BATTLE_LOOP_SHA, Music.class);
+		am.load(MUS_BATTLE_LOOP_ART, Music.class);
+		am.load(MUS_BATTLE_LOOP_BOD, Music.class);
 
 
 		batch = new SpriteBatch();

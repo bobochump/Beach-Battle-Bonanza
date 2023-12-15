@@ -19,13 +19,15 @@ public class RematchScreen extends ScreenAdapter {
     private String charMessage;
     private ConcurrentLinkedQueue<String> queue;
     private NetworkEntity network;
+    private boolean muted ;
 
-    public RematchScreen (BeachBB game, NetworkEntity connection, ConcurrentLinkedQueue<String> Q) {
+    public RematchScreen (BeachBB game, NetworkEntity connection, ConcurrentLinkedQueue<String> Q, boolean wasMuted) {
         bbbGame = game;
         network = connection;
         queue = Q;
         queue.clear();
         state = 1;
+        muted = wasMuted;
         // load sprites for UI elements
         uiTitleTexture = new Texture(Gdx.files.internal("bbb-ui-connection.png"));
         titleSprite = new TextureRegion(uiTitleTexture, 358, 0, 471, 281);
@@ -52,7 +54,7 @@ public class RematchScreen extends ScreenAdapter {
             }
             // Now, you can safely poll the queue
             charMessage = queue.poll().substring(2);
-            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 1, Integer.parseInt(charMessage), network, queue));
+            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 1, Integer.parseInt(charMessage), network, queue, muted));
 
         } else if (Gdx.input.isKeyPressed(Input.Keys.NUM_2) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
             if (state == 1) network.sendCharCommand(2);
@@ -67,7 +69,7 @@ public class RematchScreen extends ScreenAdapter {
             }
             // Now, you can safely poll the queue
             charMessage = queue.poll().substring(2);
-            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 2, Integer.parseInt(charMessage), network, queue));
+            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 2, Integer.parseInt(charMessage), network, queue, muted));
 
         } else if (Gdx.input.isKeyPressed(Input.Keys.NUM_3) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_3)) {
             if (state == 1) network.sendCharCommand(3);
@@ -82,7 +84,7 @@ public class RematchScreen extends ScreenAdapter {
             }
             // Now, you can safely poll the queue
             charMessage = queue.poll().substring(2);
-            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 3, Integer.parseInt(charMessage), network, queue));
+            if (state == 1) bbbGame.setScreen(new PlayScreen(bbbGame, 3, Integer.parseInt(charMessage), network, queue, muted));
         }
 
         /*

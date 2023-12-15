@@ -176,6 +176,9 @@ public class Player extends Actor {
     public float getPercentageHP() {
         return currentHP/totalHP;
     }
+    public int getPlayerNum(){
+        return playerType;
+    }
 
     public void updatePlayerSprite() {
         animationTimer += Gdx.graphics.getDeltaTime();

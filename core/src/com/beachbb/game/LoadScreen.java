@@ -31,14 +31,14 @@ public class LoadScreen extends ScreenAdapter {
 
         if (bbbGame.am.isFinished() && (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) && !titleShown) {
             titleShown = true;
-            bbbGame.setScreen(new TitleScreen(bbbGame));
+            bbbGame.setScreen(new TitleScreen(bbbGame, false));
         }
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean touchUp(int x, int y, int pointer, int button) {
             if (bbbGame.am.isFinished() && !titleShown) {
                 titleShown = true;
-                bbbGame.setScreen(new TitleScreen(bbbGame));
+                bbbGame.setScreen(new TitleScreen(bbbGame, false));
             }
             return true;
             }

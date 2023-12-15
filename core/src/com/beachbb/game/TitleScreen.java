@@ -26,10 +26,10 @@ public class TitleScreen extends ScreenAdapter {
     private Music musArt;
     private Music musBod;
     private int charNum;
-    private boolean muted = false;
+    private boolean muted;
     private boolean hasConnected = false;
 
-    public TitleScreen (BeachBB game) {
+    public TitleScreen (BeachBB game, boolean wasMuted) {
         bbbGame = game;
         serverOverlayActive = false;
         clientOverlayActive = false;
@@ -42,6 +42,7 @@ public class TitleScreen extends ScreenAdapter {
         waitingSprite = new TextureRegion(uiTitleTexture, 0, 109, 357, 58);
 
         //load in the music
+        muted = wasMuted;
         musDefault = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-title.ogg"));
         musSha = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-title-shark.ogg"));
         musArt = Gdx.audio.newMusic(Gdx.files.internal("bbb-music-title-artificer.ogg"));
@@ -54,10 +55,7 @@ public class TitleScreen extends ScreenAdapter {
         musSha.play();
         musArt.play();
         musBod.play();
-        musDefault.setVolume(0.5F);
-        musSha.setVolume(0);
-        musArt.setVolume(0);
-        musBod.setVolume(0);
+        swapMusic();
         //code to swap music to the looped version
         musDefault.setOnCompletionListener(new Music.OnCompletionListener() {
             @Override
@@ -199,7 +197,7 @@ public class TitleScreen extends ScreenAdapter {
             musSha.dispose();
             musArt.dispose();
             musBod.dispose();
-            bbbGame.setScreen(new PlayScreen(bbbGame, charNum, Integer.parseInt(charMessage), network, queue));
+            bbbGame.setScreen(new PlayScreen(bbbGame, charNum, Integer.parseInt(charMessage), network, queue, muted));
         }
 
         /*
