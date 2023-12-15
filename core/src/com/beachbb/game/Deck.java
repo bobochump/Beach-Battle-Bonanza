@@ -32,28 +32,28 @@ public class Deck {
         switch (characterNum) {
             case 3: //Bodega Worker
                 discard.add(new Card("Basic Attack", 1, 11, 10));
-                discard.add(new Card("Basic Attack", 1, 12, 11));
+                discard.add(new Card("Lingering Bomb", 4, 12, 13));
                 discard.add(new Card("Basic Attack", 1, 13, 12));
-                discard.add(new Card("Basic Attack", 1, 14, 13));
-                discard.add(new Card("Lingering Laser", 15, 15, 14));
+                discard.add(new Card("Basic Attack", 1, 14, 14));
+                discard.add(new Card("Lingering Laser", 15, 15, 11));
                 discard.add(new Card("Basic Attack", 1, 1, 10));
                 maxCards = 6;
                 break;
             case 2: //Artificer
                 discard.add(new Card("Basic Attack", 1, 6, 5));
                 discard.add(new Card("Basic Attack", 1, 7, 6));
-                discard.add(new Card("Basic Attack", 1, 8, 7));
+                discard.add(new Card("Basic Attack", 1, 8, 9));
                 discard.add(new Card("Basic Attack", 1, 9, 8));
-                discard.add(new Card("Tactical Laser", 15, 10, 9));
+                discard.add(new Card("Tactical Laser", 15, 10, 7));
                 discard.add(new Card("Basic Attack", 1, 11, 5));
                 maxCards = 6;
                 break;
             default: //default is character 1, the Shark
                 discard.add(new Card("Basic Attack", 1, 1, 0));
-                discard.add(new Card("Basic Attack", 1, 2, 1));
+                discard.add(new Card("Basic Attack", 1, 2, 3));
                 discard.add(new Card("Basic Attack", 1, 3, 2));
-                discard.add(new Card("Basic Attack", 1, 4, 3));
-                discard.add(new Card("MEGA DEATH LASER", 15, 5, 4));
+                discard.add(new Card("Basic Attack", 1, 4, 4));
+                discard.add(new Card("MEGA DEATH LASER", 15, 5, 1));
                 discard.add(new Card("Basic Attack", 1, 6, 0));
                 maxCards = 6;
                 break;
