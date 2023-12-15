@@ -19,6 +19,19 @@
 - Cycle through cards on the right side of the screen by pressing up/down arrow keys, or by using the numpad directly
 - Fire an attack by pressing the Enter key
 
+## Low-bar goals and completion
+- Movement along a confined grid: Complete
+- Deck of cards: Complete
+- Networked multi-play with your opponent: Complete
+- Ability to use the cards and hit your opponent with attacks: Complete
+- Victory and Defeat states when one player runs out of HP: Complete
+- At least one playable character: Complete
+
+## Additional features added
+- Three different characters with own unique sprite, backsprite, and attack/hit/idle animations
+- Variety of different attacks for each character
+- Invincibility frames implementation
+
 ## Credits
 - All artwork and assets by Zhong (June) Chai
 - All music by Camillia Moore
