@@ -9,6 +9,8 @@ public class AttackConstructor {
                 return new BombSquare(delta, playerX, playerY);
             case 5:
                 return new Laser3Wide(delta, playerX, playerY);
+            case 7:
+                return new BombCross(delta, playerX, playerY);
             case 10:
                 return new Laser2Beams(delta, playerX, playerY);
             case 12:
