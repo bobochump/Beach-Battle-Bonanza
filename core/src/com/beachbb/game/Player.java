@@ -199,6 +199,11 @@ public class Player extends Actor {
                 break;
             case 2:
                 playerSprite = animationBuff.getKeyFrame(animationTimer, true);
+                if (countdownTimer >= 0.6f) {
+                    updateCountdown = false;
+                    countdownTimer = 0f;
+                    behavior = 0;
+                }
                 break;
             case 3:
                 playerSprite = animationHit.getKeyFrame(animationTimer, true);
