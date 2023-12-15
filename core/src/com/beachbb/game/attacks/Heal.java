@@ -10,11 +10,16 @@ import java.util.ArrayList;
 
 public class Heal implements AttackEntity {
     private boolean firstRun; //used for moving between different stages of the attack
+    private boolean enemyAttack;
 
     public Heal(float delta, int playerX, int playerY){
         firstRun = true;
+        enemyAttack = playerY > 2;
     }
     public int updateAttack(float delta, ArrayList<Tile> grid){
+        if(enemyAttack) {
+            return 1;
+        }
         if(firstRun) {
             firstRun = false;
             return 2;

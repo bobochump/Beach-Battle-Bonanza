@@ -9,12 +9,17 @@ import java.util.ArrayList;
 public class Cloak implements AttackEntity {
     private int flag; //used for moving between different stages of the attack
     private float timer;
+    private boolean enemyAttack;
 
     public Cloak(float delta, int playerX, int playerY){
         flag = 0;
         timer = 0;
+        enemyAttack = playerY > 2;
     }
     public int updateAttack(float delta, ArrayList<Tile> grid){
+        if(enemyAttack) {
+            return 1;
+        }
         timer += delta;
         if(flag == 0) {
             flag = 1;
