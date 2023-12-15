@@ -12,11 +12,13 @@ public class Server extends Thread implements NetworkEntity, AutoCloseable{
     private String servAddr;
     ConcurrentLinkedQueue<String> queue;
     private boolean ended;
+    private boolean connected;
     public Server(String address, int portNumber, ConcurrentLinkedQueue<String> servQueue) {
         queue = servQueue;
         portNum = portNumber;
         servAddr = address;
         ended = false;
+        connected = false;
     }
 
     public void sendMoveCommand(int direction){
@@ -47,6 +49,7 @@ public class Server extends Thread implements NetworkEntity, AutoCloseable{
                     output = new PrintWriter(clientSocket.getOutputStream(), true);
 
                     System.out.println("Connection successful.");
+                    connected = true;
 
                     // Reads lines from client
                     String clientLine;
@@ -84,6 +87,7 @@ public class Server extends Thread implements NetworkEntity, AutoCloseable{
             interrupt();
             close();
             System.out.println("Connection ended!");
+            connected = false;
         }
     }
 
@@ -96,5 +100,9 @@ public class Server extends Thread implements NetworkEntity, AutoCloseable{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isConnected(){
+        return connected;
     }
 }

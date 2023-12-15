@@ -29,7 +29,8 @@ public class LoadScreen extends ScreenAdapter {
             bbbGame.batch.end();
         }
 
-        if (bbbGame.am.isFinished() && (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) ) {
+        if (bbbGame.am.isFinished() && (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) && !titleShown) {
+            titleShown = true;
             bbbGame.setScreen(new TitleScreen(bbbGame));
         }
 
