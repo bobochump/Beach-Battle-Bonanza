@@ -45,6 +45,7 @@ public class PlayScreen extends ScreenAdapter {
     private Music mus;
     private boolean muted;
     private float volumeMultiplier;
+    private float damageTimer;
 
     public PlayScreen(BeachBB game, int p1, int p2, NetworkEntity playerNetwork, ConcurrentLinkedQueue<String> playerQueue, boolean wasMuted) {
         bbbGame = game;
@@ -307,11 +308,13 @@ public class PlayScreen extends ScreenAdapter {
             currentAttacks.addAll(attacksToKeep);
             attacksToKeep.clear();
 
+            damageTimer+=delta;
             // collision check for your player and danger tile; subtracts multiplier * 1 hp per tick
-            if (grid.get(player1.getPlayerTileID()).getDanger()) {
+            if (grid.get(player1.getPlayerTileID()).getDanger() && damageTimer>=.03) {
                 player1.setBehavior(3);
                 network.sendOpponentBehavior(3);
                 player1.takeDamage(2.0f);
+                damageTimer = 0;
 
                 // update hp values, then ends game when one player's hp reaches 0
                 p1hpPercent = player1.getPercentageHP();

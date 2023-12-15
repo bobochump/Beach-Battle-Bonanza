@@ -18,12 +18,14 @@
 
 ### Open Issues
 - **[4]** Give each card a different effect
-- ** [5] ** Music and Sound Effects
+- **[5]** Music and Sound Effects
 - 
+
 ## Jason
 ### Resolved Issues
 - **[1]** Networking component added with movement
 - **[2]** Setup connections other than localhost
-- **[3]** Setup no rematch feature
+- **[3]** Setup no rematch feature and rematch feature
+- **[4]** Implement damage immunity
+- 
 ### Open Issues
-- **[4]** Setup rematch feature
