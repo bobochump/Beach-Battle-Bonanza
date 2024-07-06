@@ -20,8 +20,7 @@ public class TitleScreen extends ScreenAdapter {
     private String charMessage;
     private ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<String>();
     private NetworkEntity network;
-//    private String address = "127.0.0.1";
-    private String address = "192.168.11.108";
+    private String address = "your ip";
     private Music musDefault;
     private Music musSha;
     private Music musArt;
